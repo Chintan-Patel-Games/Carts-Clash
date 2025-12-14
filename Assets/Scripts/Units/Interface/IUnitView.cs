@@ -6,6 +6,8 @@ namespace CartClash.Units.Interface
     // Interface for unit views
     public interface IUnitView
     {
+        // Checks for the unit reached its destination or not
+        public bool IsMovingComplete();
         // Sets the unit's position to the specified grid node
         public void SetPosition(GridNode node);
 
