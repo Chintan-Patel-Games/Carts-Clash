@@ -503,6 +503,58 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+--- !u!1 &643025142
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 643025144}
+  - component: {fileID: 643025143}
+  m_Layer: 0
+  m_Name: ObstacleService
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &643025143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643025142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4f171c62f06971469f2bf9ce2896a44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obstacleSO: {fileID: 11400000, guid: eda21b64c07570144a19d1ef047ab37d, type: 2}
+  obstaclePrefabs:
+  - {fileID: 3048580132799966024, guid: 52e11b727194b34429c102eb2180b317, type: 3}
+  - {fileID: 7128910173460124101, guid: 3f85457b7d2ed2e43b775ffdb664cfea, type: 3}
+  - {fileID: 2877366191366256621, guid: 76f684f6219ffcf41a7b7c5079c4ede9, type: 3}
+  - {fileID: 5432148820171744231, guid: 020b0963f017f264c97dbe128b743b48, type: 3}
+  - {fileID: 4390033903234360604, guid: 59d1ea8d178f5b04e81577eb9c42e2a1, type: 3}
+  obstacleParent: {fileID: 643025144}
+--- !u!4 &643025144
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643025142}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -733,6 +785,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d82c97e5c833e0a4982e41cebfd584d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridService: {fileID: 1039414693}
+  obstacleService: {fileID: 643025143}
   uiService: {fileID: 1506656870}
 --- !u!4 &1229921867
 Transform:
@@ -1012,5 +1066,6 @@ SceneRoots:
   - {fileID: 1229921867}
   - {fileID: 1039414692}
   - {fileID: 404512548}
+  - {fileID: 643025144}
   - {fileID: 1506656869}
   - {fileID: 319210973}

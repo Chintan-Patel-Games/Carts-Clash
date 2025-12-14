@@ -17,11 +17,9 @@ namespace CartClash.Grid.Tile
         }
 
         // Method to set walkable state
-        public void SetWalkable(bool isWalkable) => 
-            this.isWalkable = isWalkable;
+        public void SetWalkable(bool isWalkable) => this.isWalkable = isWalkable;
 
         // Method to set occupied state
-        public void SetOccupied(bool isOccupied) => 
-            this.isOccupied = isOccupied;
+        public void SetOccupied(bool isOccupied) => this.isOccupied = isOccupied;
     }
 }

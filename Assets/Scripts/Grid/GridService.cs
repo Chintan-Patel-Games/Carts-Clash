@@ -27,13 +27,8 @@ namespace CartClash.Grid
             gridController = new GridController();
         }
 
-        private void Start()
-        {
-            InitializedGrid();
-        }
-
         // Initializes the grid by creating tiles based on the specified dimensions
-        public void InitializedGrid()
+        public void InitializeGrid()
         {
             for (int x = 0; x < gridX; x++)
             {
@@ -59,5 +54,26 @@ namespace CartClash.Grid
 
             gridController.AddTileView(tileView, gridPos);
         }
+
+        // Checks if the tile at the specified grid position is walkable
+        public bool IsWalkable(Vector2Int gridPos)
+        {
+            TileModel tile = gridModel.GetTile(gridPos);
+            if (tile == null) return false;
+            return tile.isWalkable && !tile.isOccupied;
+        }
+
+        // Sets the blocked state of the tile at the specified grid position
+        public void SetBlocked(Vector2Int gridPos, bool value)
+        {
+            TileModel tile = gridModel.GetTile(gridPos);
+            if (tile == null) return;
+
+            tile.SetWalkable(!value);
+            gridController.SetTileBlocked(gridPos, value);
+        }
+
+        public Vector3 GetWorldPosition(Vector2Int gridPos) => 
+            new Vector3(gridPos.x * tileSpacing, 0f, gridPos.y * tileSpacing);
     }
 }
