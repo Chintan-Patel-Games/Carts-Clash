@@ -17,9 +17,10 @@ namespace CartClash.Core.InputSystem
         }
 
         // Tries to get the grid position of the tile currently under the mouse cursor
-        public bool TryGetHoverTile(out Vector2Int tilePos)
+        public bool TryGetHoverTile(out Vector2Int tilePos, out string tileState)
         {
             tilePos = default;
+            tileState = string.Empty;
 
             if (Mouse.current == null || camera == null) return false;
 
@@ -32,6 +33,7 @@ namespace CartClash.Core.InputSystem
             if (tileView == null) return false;
 
             tilePos = tileView.gridPosition;
+            tileState = tileView.GetTileState().ToString();
             return true;
         }
     }
