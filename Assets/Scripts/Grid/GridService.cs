@@ -73,7 +73,7 @@ namespace CartClash.Grid
             if (tile == null) return;
 
             tile.SetWalkable(!value);
-            walkableGrid[gridPos.x, gridPos.y] = !IsWalkable(gridPos);
+            walkableGrid[gridPos.x, gridPos.y] = IsWalkable(gridPos);
             gridController.SetTileBlocked(gridPos, value);
         }
 
