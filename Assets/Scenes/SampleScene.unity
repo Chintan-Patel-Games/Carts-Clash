@@ -816,7 +816,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridService: {fileID: 1039414693}
   obstacleService: {fileID: 643025143}
+  inputService: {fileID: 404512549}
   playerPrefab: {fileID: 8888099939894565484, guid: 9855fcbc19f7a5f40ba45a63c4c82b79, type: 3}
+  enemyPrefab: {fileID: 8888099939894565484, guid: fe9a8ff62f1e14042b9477d2c7e122c0, type: 3}
   uiService: {fileID: 1506656870}
 --- !u!4 &1229921867
 Transform:
