@@ -4,24 +4,24 @@ using CartClash.Grid;
 using CartClash.Units.Interface;
 using System.Collections.Generic;
 
-namespace CartClash.Units.Player
+namespace CartClash.Units.Enemy
 {
-    public class PlayerUnitController : IUnitController
+    public class EnemyUnitController : IUnitController
     {
-        private PlayerUnitModel unitModel;
-        private PlayerUnitView unitView;
+        private EnemyUnitModel unitModel;
+        private EnemyUnitView unitView;
 
         private List<GridNode> path;
 
         private UnitStates currentState;
-        private PlayerStateMachine stateMachine;
+        private EnemyStateMachine stateMachine;
 
-        public PlayerUnitController(PlayerUnitModel unitModel, PlayerUnitView unitView)
+        public EnemyUnitController(EnemyUnitModel unitModel, EnemyUnitView unitView)
         {
             this.unitModel = unitModel;
             this.unitView = unitView;
 
-            stateMachine = new PlayerStateMachine(this);
+            stateMachine = new EnemyStateMachine(this);
             unitView.SetPosition(unitModel.CurrentNode);
         }
 
@@ -32,9 +32,6 @@ namespace CartClash.Units.Player
 
             unitView.MoveAlongPath(path, unitModel.MoveSpeed);
             stateMachine.ChangeState(UnitStates.MOVING);
-
-            // Disabling mouse click input
-            GameService.Instance.InputService.ToggleInput(false);
         }
 
         // Method to be called in Moving State
@@ -49,7 +46,8 @@ namespace CartClash.Units.Player
             unitModel.CurrentNode = path[^1];
             stateMachine.ChangeState(UnitStates.IDLE);
 
-            GameService.Instance.EventService.StartChasingPlayer.InvokeEvent(unitModel.CurrentNode);
+            // Enabling mouse click input
+            GameService.Instance.InputService.ToggleInput(true);
         }
 
         public void SetPath(List<GridNode> newPath)
@@ -62,6 +60,6 @@ namespace CartClash.Units.Player
 
         public void TickUpdate() => stateMachine.Update();
 
-        public GridNode CurrentPlayerNode() => unitModel.CurrentNode;
+        public GridNode CurrentEnemyNode() => unitModel.CurrentNode;
     }
 }

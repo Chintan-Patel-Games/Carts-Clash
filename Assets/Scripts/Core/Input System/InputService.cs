@@ -16,6 +16,8 @@ namespace CartClash.Core.InputSystem
         private PlayerInput playerInput;
         private InputAction clickAction;
 
+        private bool inputEnabled = true;
+
         protected override void Awake()
         {
             base.Awake();
@@ -39,11 +41,20 @@ namespace CartClash.Core.InputSystem
             playerInput.actions.Disable();
         }
 
-        private void Update() => HandleTileHover();
+        private void Update()
+        {
+            if (!inputEnabled) return;
+            HandleTileHover();
+        }
+
+        public void ToggleInput(bool value) => inputEnabled = value;
 
         // Handles the logic for mouse click
-        private void OnClickStarted(InputAction.CallbackContext context) =>
+        private void OnClickStarted(InputAction.CallbackContext context)
+        {
+            if (!inputEnabled) return;
             inputController.HandleClick(out GridNode targetNode);
+        }
 
         // Handles the logic for cursor when hovered over a tile
         private void HandleTileHover()
