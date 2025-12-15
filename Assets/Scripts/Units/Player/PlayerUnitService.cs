@@ -8,11 +8,11 @@ namespace CartClash.Units.Player
     public class PlayerUnitService : IUnitService
     {
         private GameObject playerPrefab;
-        private PlayerUnitController playerUnitController;
+        private PlayerUnitController unitController;
 
         public PlayerUnitService(GameObject playerPrefab) => this.playerPrefab = playerPrefab;
 
-        public void TickUpdate() => playerUnitController.TickUpdate();
+        public void TickUpdate() => unitController.TickUpdate();
 
         public IUnitController SpawnUnit(GridNode spawnNode)
         {
@@ -26,12 +26,12 @@ namespace CartClash.Units.Player
             }
 
             PlayerUnitModel model = new PlayerUnitModel(spawnNode, 3f);
-            playerUnitController = new PlayerUnitController(model, view);
-            return playerUnitController;
+            unitController = new PlayerUnitController(model, view);
+            return unitController;
         }
 
-        public void SetPath(List<GridNode> path) => playerUnitController.SetPath(path);
+        public void SetPath(List<GridNode> path) => unitController.SetPath(path);
 
-        public GridNode GetCurrentPlayerNode() => playerUnitController.CurrentPlayerNode();
+        public GridNode GetCurrentPlayerNode() => unitController.CurrentPlayerNode();
     }
 }

@@ -1,3 +1,4 @@
+using CartClash.Core;
 using CartClash.Core.StateMachine;
 using CartClash.Grid;
 using CartClash.Units.Interface;
@@ -31,6 +32,9 @@ namespace CartClash.Units.Player
 
             unitView.MoveAlongPath(path, unitModel.MoveSpeed);
             stateMachine.ChangeState(UnitStates.MOVING);
+
+            // Disabling mouse click input
+            GameService.Instance.InputService.ToggleInput(false);
         }
 
         // Method to be called in Moving State
@@ -44,9 +48,9 @@ namespace CartClash.Units.Player
         {
             unitModel.CurrentNode = path[^1];
             stateMachine.ChangeState(UnitStates.IDLE);
-        }
 
-        public void SetDestination(GridNode target) { }
+            GameService.Instance.EventService.StartChasingPlayer.InvokeEvent(unitModel.CurrentNode);
+        }
 
         public void SetPath(List<GridNode> newPath)
         {
