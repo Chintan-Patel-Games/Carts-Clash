@@ -1,5 +1,5 @@
 using CartClash.Core.StateMachine;
-using CartClash.PathFinding;
+using CartClash.Grid;
 using CartClash.Units.Interface;
 using System.Collections.Generic;
 
@@ -7,21 +7,20 @@ namespace CartClash.Units.Player
 {
     public class PlayerUnitController : IUnitController
     {
-        private IUnitModel unitModel;
-        private IUnitView unitView;
+        private PlayerUnitModel unitModel;
+        private PlayerUnitView unitView;
 
         private List<GridNode> path;
 
         private UnitStates currentState;
         private PlayerStateMachine stateMachine;
 
-        public PlayerUnitController(IUnitModel unitModel, IUnitView unitView)
+        public PlayerUnitController(PlayerUnitModel unitModel, PlayerUnitView unitView)
         {
             this.unitModel = unitModel;
             this.unitView = unitView;
 
             stateMachine = new PlayerStateMachine(this);
-            stateMachine.ChangeState(UnitStates.IDLE);
             unitView.SetPosition(unitModel.CurrentNode);
         }
 
@@ -38,11 +37,7 @@ namespace CartClash.Units.Player
         public bool UpdateMovement() => unitView.IsMovingComplete();
 
         // Method to be called in Arrived State to check arrived or not
-        public void RequestArrived()
-        {
-            unitModel.CurrentNode = path[^1];
-            stateMachine.ChangeState(UnitStates.ARRIVED);
-        }
+        public void RequestArrived() => stateMachine.ChangeState(UnitStates.ARRIVED);
 
         // Method to be called in Arrived State
         public void OnArrived()
@@ -55,12 +50,14 @@ namespace CartClash.Units.Player
 
         public void SetPath(List<GridNode> newPath)
         {
-            if (newPath == null || path.Count == 0) return;
+            if (newPath == null || newPath.Count == 0) return;
 
             path = newPath;
-            stateMachine.ChangeState(UnitStates.IDLE);
+            stateMachine.ChangeState(UnitStates.PROCEED);
         }
 
         public void TickUpdate() => stateMachine.Update();
+
+        public GridNode CurrentPlayerNode() => unitModel.CurrentNode;
     }
 }

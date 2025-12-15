@@ -1,4 +1,4 @@
-using CartClash.PathFinding;
+using CartClash.Grid;
 
 namespace CartClash.Units.Interface
 {
