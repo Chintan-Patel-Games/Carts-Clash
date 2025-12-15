@@ -4,11 +4,11 @@ namespace CartClash.Grid.Tile
 {
     public class TileView : MonoBehaviour
     {
-        public Vector2Int gridPosition { get; private set; }
+        public GridNode gridPosition { get; private set; }
 
         private TileState currentState = TileState.DEFAULT;
 
-        public void Initialize(Vector2Int position, bool isWalkable)
+        public void Initialize(GridNode position, bool isWalkable)
         {
             gridPosition = position;
             SetBlocked(!isWalkable);

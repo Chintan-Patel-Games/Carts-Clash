@@ -16,6 +16,8 @@ namespace CartClash.Grid
         [SerializeField] private TileView tilePrefab;
         [SerializeField] private Transform tileParent;
 
+        private bool[,] walkableGrid;
+
         private GridModel gridModel;
         private GridController gridController;
 
@@ -23,6 +25,7 @@ namespace CartClash.Grid
         {
             base.Awake();
 
+            walkableGrid = new bool[gridX, gridZ];
             gridModel = new GridModel();
             gridController = new GridController();
         }
@@ -34,16 +37,16 @@ namespace CartClash.Grid
             {
                 for (int z = 0; z < gridZ; z++)
                 {
-                    Vector2Int gridPos = new Vector2Int(x, z);
-                    Vector3 worldPos = new Vector3(x * tileSpacing, 0f, z * tileSpacing);
-
+                    GridNode gridPos = new(x, z);
+                    Vector3 worldPos = new(x * tileSpacing, 0f, z * tileSpacing);
+                    walkableGrid[x, z] = true;
                     CreateTile(gridPos, worldPos);
                 }
             }
         }
 
         // Creates a tile at the specified grid and world positions
-        private void CreateTile(Vector2Int gridPos, Vector3 worldPos)
+        private void CreateTile(GridNode gridPos, Vector3 worldPos)
         {
             TileModel tileModel = new TileModel(gridPos, isWalkable: true, isOccupied: false);
             gridModel.AddTile(tileModel);
@@ -56,7 +59,7 @@ namespace CartClash.Grid
         }
 
         // Checks if the tile at the specified grid position is walkable
-        public bool IsWalkable(Vector2Int gridPos)
+        public bool IsWalkable(GridNode gridPos)
         {
             TileModel tile = gridModel.GetTile(gridPos);
             if (tile == null) return false;
@@ -64,16 +67,19 @@ namespace CartClash.Grid
         }
 
         // Sets the blocked state of the tile at the specified grid position
-        public void SetBlocked(Vector2Int gridPos, bool value)
+        public void SetBlocked(GridNode gridPos, bool value)
         {
             TileModel tile = gridModel.GetTile(gridPos);
             if (tile == null) return;
 
             tile.SetWalkable(!value);
+            walkableGrid[gridPos.x, gridPos.y] = !IsWalkable(gridPos);
             gridController.SetTileBlocked(gridPos, value);
         }
 
-        public Vector3 GetWorldPosition(Vector2Int gridPos) => 
+        public Vector3 GetWorldPosition(GridNode gridPos) => 
             new Vector3(gridPos.x * tileSpacing, 0f, gridPos.y * tileSpacing);
+
+        public bool[,] GetWalkableGrid => walkableGrid;
     }
 }

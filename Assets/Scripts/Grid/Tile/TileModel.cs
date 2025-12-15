@@ -1,15 +1,13 @@
-using UnityEngine;
-
 namespace CartClash.Grid.Tile
 {
     // Model representing a single tile in the grid
     public class TileModel
     {
-        public Vector2Int tilePosition { get; private set; }
+        public GridNode tilePosition { get; private set; }
         public bool isWalkable { get; private set; }
         public bool isOccupied { get; private set; }
 
-        public TileModel(Vector2Int tilePosition, bool isWalkable, bool isOccupied)
+        public TileModel(GridNode tilePosition, bool isWalkable, bool isOccupied)
         {
             this.tilePosition = tilePosition;
             this.isWalkable = isWalkable;
