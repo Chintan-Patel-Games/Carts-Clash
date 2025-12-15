@@ -1,3 +1,4 @@
+using CartClash.Grid;
 using CartClash.Grid.Tile;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,25 +17,46 @@ namespace CartClash.Core.InputSystem
             this.tileLayer = tileLayer;
         }
 
+        // Handles the Mouse Click event
+        public void HandleClick(out GridNode targetNode)
+        {
+            targetNode = default;
+            if (!Mouse.current.leftButton.isPressed) return;
+
+            TileView tileView = GetTileFromMousePos();
+            targetNode = default;
+            if (tileView == null) return;
+
+            targetNode = tileView.gridPosition;
+
+            GameService.Instance.EventService.OnTileSelected.InvokeEvent(targetNode);
+        }
+
         // Tries to get the grid position of the tile currently under the mouse cursor
-        public bool TryGetHoverTile(out Vector2Int tilePos, out string tileState)
+        public bool TryGetHoverTile(out GridNode tilePos, out string tileState)
         {
             tilePos = default;
             tileState = string.Empty;
 
             if (Mouse.current == null || camera == null) return false;
 
-            Vector2 mousePos = Mouse.current.position.ReadValue();
-            Ray ray = camera.ScreenPointToRay(mousePos);
-
-            if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, tileLayer)) return false;
-
-            TileView tileView = hit.collider.GetComponent<TileView>();
+            TileView tileView = GetTileFromMousePos();
             if (tileView == null) return false;
 
             tilePos = tileView.gridPosition;
             tileState = tileView.GetTileState().ToString();
             return true;
+        }
+
+        // Getter method to get TileView from mouse click
+        private TileView GetTileFromMousePos()
+        {
+            Vector2 mousePos = Mouse.current.position.ReadValue();
+            Ray ray = camera.ScreenPointToRay(mousePos);
+
+            if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, tileLayer)) return null;
+
+            return hit.collider.GetComponent<TileView>();
         }
     }
 }

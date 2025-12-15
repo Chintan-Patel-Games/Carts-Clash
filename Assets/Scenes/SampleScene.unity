@@ -259,7 +259,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -284,13 +284,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 4.5, y: 5, z: 0}
+  m_LocalRotation: {x: 0.23911765, y: 0.3696438, z: -0.09904577, w: 0.89239913}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 30, y: 45, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,6 +345,7 @@ GameObject:
   m_Component:
   - component: {fileID: 404512548}
   - component: {fileID: 404512549}
+  - component: {fileID: 404512550}
   m_Layer: 0
   m_Name: InputService
   m_TagString: Untagged
@@ -382,6 +383,36 @@ MonoBehaviour:
   tileLayer:
     serializedVersion: 2
     m_Bits: 8
+--- !u!114 &404512550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 404512547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_NotificationBehavior: 3
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: UI
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,8 +565,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   obstacleSO: {fileID: 11400000, guid: eda21b64c07570144a19d1ef047ab37d, type: 2}
   obstaclePrefabs:
-  - {fileID: 3048580132799966024, guid: 52e11b727194b34429c102eb2180b317, type: 3}
-  - {fileID: 7128910173460124101, guid: 3f85457b7d2ed2e43b775ffdb664cfea, type: 3}
   - {fileID: 2877366191366256621, guid: 76f684f6219ffcf41a7b7c5079c4ede9, type: 3}
   - {fileID: 5432148820171744231, guid: 020b0963f017f264c97dbe128b743b48, type: 3}
   - {fileID: 4390033903234360604, guid: 59d1ea8d178f5b04e81577eb9c42e2a1, type: 3}
@@ -787,6 +816,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridService: {fileID: 1039414693}
   obstacleService: {fileID: 643025143}
+  playerPrefab: {fileID: 8888099939894565484, guid: 9855fcbc19f7a5f40ba45a63c4c82b79, type: 3}
   uiService: {fileID: 1506656870}
 --- !u!4 &1229921867
 Transform:
