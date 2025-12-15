@@ -1,3 +1,4 @@
+using CartClash.Grid;
 using CartClash.Grid.Tile;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -17,7 +18,7 @@ namespace CartClash.Core.InputSystem
         }
 
         // Handles the Mouse Click event
-        public void HandleClick(out Vector2Int targetNode)
+        public void HandleClick(out GridNode targetNode)
         {
             targetNode = default;
             if (!Mouse.current.leftButton.isPressed) return;
@@ -32,7 +33,7 @@ namespace CartClash.Core.InputSystem
         }
 
         // Tries to get the grid position of the tile currently under the mouse cursor
-        public bool TryGetHoverTile(out Vector2Int tilePos, out string tileState)
+        public bool TryGetHoverTile(out GridNode tilePos, out string tileState)
         {
             tilePos = default;
             tileState = string.Empty;

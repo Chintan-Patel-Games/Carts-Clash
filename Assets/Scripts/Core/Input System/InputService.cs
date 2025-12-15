@@ -1,3 +1,4 @@
+using CartClash.Grid;
 using CartClash.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -40,12 +41,14 @@ namespace CartClash.Core.InputSystem
 
         private void Update() => HandleTileHover();
 
+        // Handles the logic for mouse click
         private void OnClickStarted(InputAction.CallbackContext context) =>
-            inputController.HandleClick(out Vector2Int targetNode);
+            inputController.HandleClick(out GridNode targetNode);
 
+        // Handles the logic for cursor when hovered over a tile
         private void HandleTileHover()
         {
-            if (!inputController.TryGetHoverTile(out Vector2Int currentTile, out string tileState)) return;
+            if (!inputController.TryGetHoverTile(out GridNode currentTile, out string tileState)) return;
 
             Vector2Int tilePos = new Vector2Int(currentTile.x, currentTile.y);
 
