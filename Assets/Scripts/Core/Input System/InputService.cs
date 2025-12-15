@@ -23,13 +23,13 @@ namespace CartClash.Core.InputSystem
 
         private void HandleTileHover()
         {
-            if (!inputController.TryGetHoverTile(out Vector2Int currentTile)) return;
+            if (!inputController.TryGetHoverTile(out Vector2Int currentTile, out string tileState)) return;
 
             if (lastHoveredTile.HasValue && lastHoveredTile.Value == currentTile) return;
 
             lastHoveredTile = currentTile;
 
-            GameService.Instance.UIService.UpdateCurrentTileText(currentTile.ToString());
+            GameService.Instance.UIService.UpdateCurrentTileText(currentTile.ToString() + " : " + tileState);
         }
     }
 }

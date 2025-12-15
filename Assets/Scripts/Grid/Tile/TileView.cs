@@ -17,5 +17,7 @@ namespace CartClash.Grid.Tile
         // Sets the tile's blocked state
         public void SetBlocked(bool value) =>
             currentState = value ? TileState.BLOCKED : TileState.DEFAULT;
+
+        public TileState GetTileState() => currentState;
     }
 }
