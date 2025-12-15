@@ -1,3 +1,4 @@
+using CartClash.Grid;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,10 +9,10 @@ namespace CartClash.PathFinding
     {
         private static readonly Vector2Int[] Directions =
         {
-            new Vector2Int(0, 1),   // Up
-            new Vector2Int(1, 0),   // Right
-            new Vector2Int(0, -1),  // Down
-            new Vector2Int(-1, 0)   // Left
+            Vector2Int.up,     // Up
+            Vector2Int.right,  // Right
+            Vector2Int.down,   // Down
+            Vector2Int.left    // Left
         };
 
         public List<GridNode> FindPath(GridNode start, GridNode goal, bool[,] grid)
@@ -19,62 +20,61 @@ namespace CartClash.PathFinding
             int width = grid.GetLength(0);
             int height = grid.GetLength(1);
 
-            Queue<GridNode> queue = new();
-            Dictionary<GridNode, GridNode> cameFrom = new();
+            Queue<Vector2Int> queue = new();
+            Dictionary<Vector2Int, Vector2Int> cameFrom = new();
             HashSet<GridNode> visited = new();
 
-            queue.Enqueue(start);
-            visited.Add(start);
+            Vector2Int startNode = new(start.x, start.y);
+            Vector2Int goalNode = new(goal.x, goal.y);
+
+            queue.Enqueue(startNode);
+            cameFrom[startNode] = startNode;
 
             while (queue.Count > 0)
             {
-                GridNode current = queue.Dequeue();
+                Vector2Int current = queue.Dequeue();
 
-                if (current.x == goal.x && current.y == goal.y)
-                    return ReconstructPath(cameFrom, current, goal);
+                if (current == goalNode) break;
 
                 foreach (var direction in Directions)
                 {
-                    int nx = current.x + direction.x;
-                    int ny = current.y + direction.y;
+                    Vector2Int next = current + direction;
 
-                    if (!IsValid(nx, ny, grid))
+                    if (next.x < 0 || next.x >= width ||
+                        next.y < 0 || next.y >= height)
                         continue;
 
-                    GridNode neighbor = new(nx, ny);
-
-                    if (visited.Contains(neighbor))
+                    if (!grid[next.x, next.y])
                         continue;
 
-                    visited.Add(neighbor);
-                    cameFrom[neighbor] = current;
-                    queue.Enqueue(neighbor);
+                    if (cameFrom.ContainsKey(next))
+                        continue;
+
+                    queue.Enqueue(next);
+                    cameFrom[next] = current;
                 }
             }
 
-            return null; // No path found
+            if (!cameFrom.ContainsKey(goalNode))
+                return null; // No path found
+
+            return ReconstructPath(cameFrom, startNode, goalNode);
         }
 
-        private bool IsValid(int x, int y, bool[,] grid)
-        {
-            int width = grid.GetLength(0);
-            int height = grid.GetLength(1);
-            return x >= 0 && x < width && y >= 0 && y < height && grid[x, y];
-        }
-
-        private List<GridNode> ReconstructPath(Dictionary<GridNode, GridNode> cameFrom, GridNode start, GridNode goal)
+        private List<GridNode> ReconstructPath(Dictionary<Vector2Int, Vector2Int> cameFrom, Vector2Int start, Vector2Int goal)
         {
             List<GridNode> path = new();
-            GridNode current = goal;
+            Vector2Int step = goal;
 
-            while (!current.Equals(start))
+            while (step != start)
             {
-                path.Add(current);
-                current = cameFrom[current];
+                path.Add(new GridNode(step.x, step.y));
+                step = cameFrom[step];
             }
 
-            path.Add(start);
+            path.Add(new GridNode(step.x, step.y));
             path.Reverse();
+
             return path;
         }
     }

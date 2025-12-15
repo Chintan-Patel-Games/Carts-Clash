@@ -565,8 +565,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   obstacleSO: {fileID: 11400000, guid: eda21b64c07570144a19d1ef047ab37d, type: 2}
   obstaclePrefabs:
-  - {fileID: 3048580132799966024, guid: 52e11b727194b34429c102eb2180b317, type: 3}
-  - {fileID: 7128910173460124101, guid: 3f85457b7d2ed2e43b775ffdb664cfea, type: 3}
   - {fileID: 2877366191366256621, guid: 76f684f6219ffcf41a7b7c5079c4ede9, type: 3}
   - {fileID: 5432148820171744231, guid: 020b0963f017f264c97dbe128b743b48, type: 3}
   - {fileID: 4390033903234360604, guid: 59d1ea8d178f5b04e81577eb9c42e2a1, type: 3}

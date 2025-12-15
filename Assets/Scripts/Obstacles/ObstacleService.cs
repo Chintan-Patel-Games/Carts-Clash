@@ -25,7 +25,7 @@ namespace CartClash.Obstacles
                 {
                     if (!obstacleSO.IsBlocked(x, y)) continue;
 
-                    Vector2Int gridPos = new Vector2Int(x, y);
+                    GridNode gridPos = new(x, y);
 
                     if (!GridService.Instance.IsWalkable(gridPos)) continue;
 
@@ -36,12 +36,10 @@ namespace CartClash.Obstacles
         }
 
         // Spawns an obstacle at the specified grid position
-        public void SpawnObstacle(Vector2Int gridPos)
+        public void SpawnObstacle(GridNode gridPos)
         {
             Vector3 worldPos = GridService.Instance.GetWorldPosition(gridPos);
-
             GameObject prefab = obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)];
-
             Instantiate(prefab, worldPos, Quaternion.identity, obstacleParent);
         }
     }
