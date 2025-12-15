@@ -1,5 +1,6 @@
 using CartClash.Utilities;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace CartClash.Core.InputSystem
 {
@@ -11,25 +12,48 @@ namespace CartClash.Core.InputSystem
         private InputController inputController;
         private Vector2Int? lastHoveredTile;
 
+        private PlayerInput playerInput;
+        private InputAction clickAction;
+
         protected override void Awake()
         {
             base.Awake();
 
             Camera cam = Camera.main;
             inputController = new InputController(cam, tileLayer);
+
+            playerInput = GetComponent<PlayerInput>();
+            clickAction = playerInput.actions["UI/Click"];
+        }
+
+        private void OnEnable()
+        {
+            playerInput.actions.Enable();
+            clickAction.performed += OnClickStarted;
+        }
+
+        private void OnDisable()
+        {
+            clickAction.performed -= OnClickStarted;
+            playerInput.actions.Disable();
         }
 
         private void Update() => HandleTileHover();
+
+        private void OnClickStarted(InputAction.CallbackContext context) =>
+            inputController.HandleClick(out Vector2Int targetNode);
 
         private void HandleTileHover()
         {
             if (!inputController.TryGetHoverTile(out Vector2Int currentTile, out string tileState)) return;
 
-            if (lastHoveredTile.HasValue && lastHoveredTile.Value == currentTile) return;
+            Vector2Int tilePos = new Vector2Int(currentTile.x, currentTile.y);
 
-            lastHoveredTile = currentTile;
+            if (lastHoveredTile.HasValue && lastHoveredTile.Value == tilePos) return;
 
-            GameService.Instance.UIService.UpdateCurrentTileText(currentTile.ToString() + " : " + tileState);
+            lastHoveredTile = tilePos;
+
+            GameService.Instance.UIService.UpdateCurrentTileText(tilePos.ToString() + " : " + tileState);
         }
     }
 }

@@ -1,15 +1,15 @@
-using CartClash.PathFinding;
+using UnityEngine;
 
 namespace CartClash.Core.Events
 {
     public class EventService
     {
         // Event for OnMouseClick to send tilePos to PathfindingService
-        public EventController<GridNode> OnTileSelected { get; private set; }
+        public EventController<Vector2Int> OnTileSelected { get; private set; }
 
         public EventService()
         {
-            OnTileSelected = new EventController<GridNode>();
+            OnTileSelected = new EventController<Vector2Int>();
         }
     }
 }
