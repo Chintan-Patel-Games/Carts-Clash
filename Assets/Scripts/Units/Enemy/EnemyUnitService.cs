@@ -13,36 +13,44 @@ namespace CartClash.Units.Enemy
         private EnemyUnitController unitController;
         private EnemyUnitAI enemyUnitAI;
 
+        // Constructor to get enemy prefab & initialise enemy AI
         public EnemyUnitService(GameObject enemyPrefab, PathFindingService pathFindingService)
         {
             this.enemyPrefab = enemyPrefab;
             enemyUnitAI = new EnemyUnitAI(this, pathFindingService);
         }
 
-        public void OnEnable() => enemyUnitAI.OnEnable();
+        // Generates a new path using BFS pathfinding algorithm
+        public List<GridNode> GeneratePath(GridNode targetNode) => enemyUnitAI.GeneratePath(targetNode);
 
-        public void OnDisable() => enemyUnitAI.OnDisable();
+        // TickUpdate method to be called in Unity Update lifecycle method
+        public void TickUpdate()
+        {
+            if (unitController != null)
+                unitController.TickUpdate();
+        }
 
-        public void TickUpdate() => unitController.TickUpdate();
-
+        // Public mehtod to spawn enemy unit
         public IUnitController SpawnUnit(GridNode spawnNode)
         {
-            GameObject enemy = Object.Instantiate(enemyPrefab);
-            var view = enemy.GetComponent<EnemyUnitView>();
+            GameObject enemy = Object.Instantiate(enemyPrefab);  // Spawns the enemy
+            var view = enemy.GetComponent<EnemyUnitView>();  // Get enemy view class
 
-            if (view == null)
+            if (view == null)  // Check for enemy view null references
             {
-                Debug.LogError("EnemyUnitView missing on Enemy prefab");
+                Debug.LogError("[EnemyUnitService] : EnemyUnitView missing on Enemy prefab");
                 return null;
             }
 
-            EnemyUnitModel model = new EnemyUnitModel(spawnNode, 3f);
-            unitController = new EnemyUnitController(model, view);
+            EnemyUnitModel model = new EnemyUnitModel(spawnNode, 3f);  // Initialize enemy model class
+            unitController = new EnemyUnitController(model, view);  // Initialize player controller class
             return unitController;
         }
 
+        // Global method to set enemy path
         public void SetPath(List<GridNode> path) => unitController.SetPath(path);
 
+        // Global method to get current position of enemy
         public GridNode GetCurrentEnemyNode() => unitController.CurrentEnemyNode();
     }
 }

@@ -13,19 +13,22 @@ namespace CartClash.Units.Player
         private PlayerUnitController unitController;
         private PlayerUnitAI playerUnitAI;
 
-        // Constructor to get player prefab
+        // Constructor to get player prefab & initialise player AI
         public PlayerUnitService(GameObject playerPrefab, PathFindingService pathFindingService)
         {
             this.playerPrefab = playerPrefab;
             playerUnitAI = new PlayerUnitAI(this, pathFindingService);
         }
 
-        public void OnEnable() => playerUnitAI.OnEnable();
-
-        public void OnDisable() => playerUnitAI.OnDisable();
+        // Generates a new path using BFS pathfinding algorithm
+        public List<GridNode> GeneratePath(GridNode targetNode) => playerUnitAI.GeneratePath(targetNode);
 
         // TickUpdate method to be called in Unity Update lifecycle method
-        public void TickUpdate() => unitController.TickUpdate();
+        public void TickUpdate()
+        {
+            if (unitController != null)
+                unitController.TickUpdate();
+        }
 
         // Public mehtod to spawn player unit
         public IUnitController SpawnUnit(GridNode spawnNode)

@@ -2,7 +2,7 @@ using CartClash.Core;
 using CartClash.Grid;
 using CartClash.PathFinding;
 using CartClash.Units.Enemy;
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace CartClash.AI
@@ -19,32 +19,24 @@ namespace CartClash.AI
             this.pathfinder = pathfinder;
         }
 
-        // Subscribe to events
-        public void OnEnable() =>
-            GameService.Instance.EventService.StartChasingPlayer.AddListener(EnemyChasePlayer);
-
-        // UnSubscribe to events
-        public void OnDisable() =>
-            GameService.Instance.EventService.StartChasingPlayer.RemoveListener(EnemyChasePlayer);
-
-        // Method for the EnemyChasePlayer event to call during invoke
-        private void EnemyChasePlayer(GridNode targetNode)
+        // Generates a new path using BFS pathfinding algorithm
+        public List<GridNode> GeneratePath(GridNode targetNode)
         {
-            if (enemy == null) return;
+            if (enemy == null) return null;
 
             GridNode startNode = enemy.GetCurrentEnemyNode();
 
             GridNode? chaseNode = GetAdjacentWalkableTile(targetNode, startNode);
 
-            if (chaseNode == null) return;
+            if (chaseNode == null) return null;
 
             bool[,] walkableGrid = GameService.Instance.GridService.GetWalkableGrid;
 
             var path = pathfinder.FindPathWithBFS(startNode, chaseNode.Value, walkableGrid);
 
-            if (path == null || path.Count == 0) return;
+            if (path == null || path.Count == 0) return null;
 
-            enemy.SetPath(path);
+            return path;
         }
 
         private GridNode? GetAdjacentWalkableTile(GridNode targetNode, GridNode startNode)

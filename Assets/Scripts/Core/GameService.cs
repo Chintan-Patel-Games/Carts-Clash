@@ -1,3 +1,4 @@
+using CartClash.Command;
 using CartClash.Core.Events;
 using CartClash.Core.InputSystem;
 using CartClash.Grid;
@@ -37,15 +38,15 @@ namespace CartClash.Core
         [SerializeField] private GameObject enemyPrefab;
 
         // Getting References of Non-Monobehaviour classes
+        public EventService EventService { get; private set; }
         public PathFindingService PathFindingService { get; private set; }
         public PlayerUnitService PlayerUnitService { get; private set; }
         public EnemyUnitService EnemyUnitService { get; private set; }
-        public EventService EventService { get; private set; }
+        public CommandInvoker CommandInvoker { get; private set; }
 
         protected override void Awake()
         {
             base.Awake();
-
             InitializeServices();
         }
 
@@ -55,18 +56,7 @@ namespace CartClash.Core
             PathFindingService = new();
             PlayerUnitService = new(playerPrefab, PathFindingService);
             EnemyUnitService = new(enemyPrefab, PathFindingService);
-        }
-
-        private void OnEnable()
-        {
-            PlayerUnitService.OnEnable();
-            EnemyUnitService.OnEnable();
-        }
-
-        private void OnDisable()
-        {
-            PlayerUnitService.OnDisable();
-            EnemyUnitService.OnDisable();
+            CommandInvoker = new();
         }
 
         private void Start()

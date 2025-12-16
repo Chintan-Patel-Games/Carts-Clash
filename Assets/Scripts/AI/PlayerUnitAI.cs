@@ -2,6 +2,7 @@ using CartClash.Core;
 using CartClash.Grid;
 using CartClash.PathFinding;
 using CartClash.Units.Player;
+using System.Collections.Generic;
 
 namespace CartClash.AI
 {
@@ -17,18 +18,10 @@ namespace CartClash.AI
             this.pathfinder = pathfinder;
         }
 
-        // Subscribe to events
-        public void OnEnable() =>
-            GameService.Instance.EventService.OnTileSelected.AddListener(OnTileSelected);
-
-        // UnSubscribe to events
-        public void OnDisable() =>
-            GameService.Instance.EventService.OnTileSelected.RemoveListener(OnTileSelected);
-
-        // Method for the OnTileSelected event to call during invoke
-        private void OnTileSelected(GridNode targetNode)
+        // Generates a new path using BFS pathfinding algorithm
+        public List<GridNode> GeneratePath(GridNode targetNode)
         {
-            if (player == null) return;
+            if (player == null) return null;
 
             GridNode startNode = player.GetCurrentPlayerNode();
 
@@ -36,9 +29,9 @@ namespace CartClash.AI
 
             var path = pathfinder.FindPathWithBFS(startNode, targetNode, walkableGrid);
 
-            if (path == null || path.Count == 0) return;
+            if (path == null || path.Count == 0) return null;
 
-            player.SetPath(path);
+            return path;
         }
     }
 }
