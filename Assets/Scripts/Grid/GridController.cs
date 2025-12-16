@@ -22,11 +22,19 @@ namespace CartClash.Grid
         }
 
         // Will be called when an obstacle is placed on the tile
-        // Sets the tile at the specified position to default state
+        // Sets the tile at the specified position to blocked state
         public void SetTileBlocked(GridNode position, bool value)
         {
-            if (!tileViews.TryGetValue(position, out TileView view)) return;
-            view.SetBlocked(value);
+            if (!tileViews.TryGetValue(position, out TileView tileView)) return;
+            tileView.SetBlocked(value);
+        }
+
+        // Will be called when an unit is standing on the tile
+        // Sets the tile at the specified position to occupied state
+        public void SetTileOccupied(GridNode position, bool value)
+        {
+            if (!tileViews.TryGetValue(position, out TileView tileView)) return;
+            tileView.SetOccupied(value);
         }
 
         //  Checks if a TileView exists at the given position

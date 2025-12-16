@@ -3,7 +3,7 @@ namespace CartClash.Grid.Tile
     public enum TileState
     {
         DEFAULT,
-        CLICKED,
+        OCCUPIED,
         BLOCKED
     }
 }

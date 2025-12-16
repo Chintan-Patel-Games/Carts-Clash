@@ -44,14 +44,22 @@ namespace CartClash.Core
             base.Awake();
 
             EventService = new();
-            PlayerUnitService = new(playerPrefab);
-            EnemyUnitService = new(enemyPrefab);
             PathFindingService = new();
+            PlayerUnitService = new(playerPrefab, PathFindingService);
+            EnemyUnitService = new(enemyPrefab, PathFindingService);
         }
 
-        private void OnEnable() => PathFindingService.OnEnable();
+        private void OnEnable()
+        {
+            PlayerUnitService.OnEnable();
+            EnemyUnitService.OnEnable();
+        }
 
-        private void OnDisable() => PathFindingService.OnDisable();
+        private void OnDisable()
+        {
+            PlayerUnitService.OnDisable();
+            EnemyUnitService.OnDisable();
+        }
 
         private void Start()
         {
@@ -60,8 +68,6 @@ namespace CartClash.Core
 
             PlayerUnitService.SpawnUnit(new GridNode(1,3));
             EnemyUnitService.SpawnUnit(new GridNode(7,8));
-
-            PathFindingService.Initialize();
         }
 
         private void Update()

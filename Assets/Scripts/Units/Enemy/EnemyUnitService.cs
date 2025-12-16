@@ -1,4 +1,6 @@
+using CartClash.AI;
 using CartClash.Grid;
+using CartClash.PathFinding;
 using CartClash.Units.Interface;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,8 +11,17 @@ namespace CartClash.Units.Enemy
     {
         private GameObject enemyPrefab;
         private EnemyUnitController unitController;
+        private EnemyUnitAI enemyUnitAI;
 
-        public EnemyUnitService(GameObject enemyPrefab) => this.enemyPrefab = enemyPrefab;
+        public EnemyUnitService(GameObject enemyPrefab, PathFindingService pathFindingService)
+        {
+            this.enemyPrefab = enemyPrefab;
+            enemyUnitAI = new EnemyUnitAI(this, pathFindingService);
+        }
+
+        public void OnEnable() => enemyUnitAI.OnEnable();
+
+        public void OnDisable() => enemyUnitAI.OnDisable();
 
         public void TickUpdate() => unitController.TickUpdate();
 
