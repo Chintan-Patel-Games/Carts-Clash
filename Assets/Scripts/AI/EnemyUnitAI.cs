@@ -2,6 +2,8 @@ using CartClash.Core;
 using CartClash.Grid;
 using CartClash.PathFinding;
 using CartClash.Units.Enemy;
+using System;
+using UnityEngine;
 
 namespace CartClash.AI
 {
@@ -32,16 +34,49 @@ namespace CartClash.AI
 
             GridNode startNode = enemy.GetCurrentEnemyNode();
 
+            GridNode? chaseNode = GetAdjacentWalkableTile(targetNode, startNode);
+
+            if (chaseNode == null) return;
+
             bool[,] walkableGrid = GameService.Instance.GridService.GetWalkableGrid;
 
-            var path = pathfinder.FindPathWithBFS(startNode, targetNode, walkableGrid);
+            var path = pathfinder.FindPathWithBFS(startNode, chaseNode.Value, walkableGrid);
 
             if (path == null || path.Count == 0) return;
 
-            if (path.Count > 1)
-                path.RemoveRange(path.Count - 1, 1);
-
             enemy.SetPath(path);
+        }
+
+        private GridNode? GetAdjacentWalkableTile(GridNode targetNode, GridNode startNode)
+        {
+            GridNode[] neighbours =
+            {
+                new(targetNode.x + 1, targetNode.y),
+                new(targetNode.x - 1, targetNode.y),
+                new(targetNode.x, targetNode.y + 1),
+                new(targetNode.x, targetNode.y - 1),
+            };
+
+            GridNode? best = null;
+            int bestDist = int.MaxValue;
+
+            foreach (var n in neighbours)
+            {
+                if (!GameService.Instance.GridService.IsWalkable(n))
+                    continue;
+
+                int dist =
+                    Mathf.Abs(n.x - startNode.x) +
+                    Mathf.Abs(n.y - startNode.y);
+
+                if (dist < bestDist)
+                {
+                    bestDist = dist;
+                    best = n;
+                }
+            }
+
+            return best;
         }
     }
 }

@@ -12,6 +12,7 @@ namespace CartClash.Core
 {
     public class GameService : GenericMonoSingleton<GameService>
     {
+        // Getting References of Monobehaviour classes
         [Header("Grid")]
         [SerializeField] private GridService gridService;
         public GridService GridService => gridService;
@@ -24,16 +25,18 @@ namespace CartClash.Core
         [SerializeField] private InputService inputService;
         public InputService InputService => inputService;
 
+        [Header("UI")]
+        [SerializeField] private UIService uiService;
+        public UIService UIService => uiService;
+
+        // Getting references of Prefabs
         [Header("Player")]
         [SerializeField] private GameObject playerPrefab;
 
         [Header("Enemy")]
         [SerializeField] private GameObject enemyPrefab;
 
-        [Header("UI")]
-        [SerializeField] private UIService uiService;
-        public UIService UIService => uiService;
-
+        // Getting References of Non-Monobehaviour classes
         public PathFindingService PathFindingService { get; private set; }
         public PlayerUnitService PlayerUnitService { get; private set; }
         public EnemyUnitService EnemyUnitService { get; private set; }
@@ -43,6 +46,11 @@ namespace CartClash.Core
         {
             base.Awake();
 
+            InitializeServices();
+        }
+
+        private void InitializeServices()
+        {
             EventService = new();
             PathFindingService = new();
             PlayerUnitService = new(playerPrefab, PathFindingService);

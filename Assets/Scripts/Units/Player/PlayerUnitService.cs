@@ -35,7 +35,7 @@ namespace CartClash.Units.Player
 
             if (view == null)  // Check for player view null references
             {
-                Debug.LogError("PlayerUnitView missing on Player prefab");
+                Debug.LogError("[PlayerUnitService] : PlayerUnitView missing on Player prefab");
                 return null;
             }
 
