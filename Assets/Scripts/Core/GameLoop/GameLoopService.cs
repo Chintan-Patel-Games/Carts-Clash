@@ -28,6 +28,8 @@ namespace CartClash.Core.GameLoop
 
         public void TickUpdate() => controller.TickUpdate();
 
+        public void OnUndo() => controller.OnUndo();
+
         public GameLoopState GetCurrentState() => controller.GetCurrentState();
     }
 }

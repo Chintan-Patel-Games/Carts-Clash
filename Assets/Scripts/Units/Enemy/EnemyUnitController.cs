@@ -3,6 +3,7 @@ using CartClash.Core.StateMachine;
 using CartClash.Grid;
 using CartClash.Units.Interface;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace CartClash.Units.Enemy
 {
@@ -50,6 +51,7 @@ namespace CartClash.Units.Enemy
 
             unitModel.CurrentNode = path[^1];
             stateMachine.ChangeState(UnitStates.IDLE);
+            Debug.Log("[EnemyUnitControler] Enemy reached destination");
 
             // Enabling mouse click input
             GameService.Instance.InputService.ToggleInput(true);

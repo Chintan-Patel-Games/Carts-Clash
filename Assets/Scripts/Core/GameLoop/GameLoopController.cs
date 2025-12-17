@@ -3,7 +3,6 @@ using CartClash.Core.StateMachine;
 using CartClash.Grid;
 using CartClash.Units.Enemy;
 using CartClash.Units.Player;
-using UnityEngine;
 
 namespace CartClash.Core.GameLoop
 {
@@ -62,7 +61,8 @@ namespace CartClash.Core.GameLoop
                     break;
 
                 case GameLoopState.SELECT_ENEMY_SPAWN:
-                    TryProcessEnemySpawn(node);
+                    if (!TryProcessEnemySpawn(node))
+                        return;
                     break;
 
                 case GameLoopState.PLAYER_TURN:
@@ -95,7 +95,10 @@ namespace CartClash.Core.GameLoop
             commandInvoker.ProcessCommand(commandToProcess);
 
             if (enemyService.GetUnitController() == null)
+            {
+                commandToProcess = null;
                 return false;
+            }
 
             stateMachine.ChangeState(GameLoopState.PLAYER_TURN);
             GameService.Instance.UIService.UpdateCurrentStateText(GameLoopState.PLAYER_TURN.ToString());

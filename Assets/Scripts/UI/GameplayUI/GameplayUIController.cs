@@ -23,7 +23,7 @@ namespace CartClash.UI.GameplayUI
         public void ShowWarningPanel() => gameplayUIView.ShowWarningPanel();
         public void HideSpawnPanel() => gameplayUIView.HideSpawnPanel();
 
-        public void OnUndoButtonClicked() => GameService.Instance.CommandInvoker.Undo();
+        public void OnUndoButtonClicked() => GameService.Instance.GameLoopService.OnUndo();
 
         public void Show() => gameplayUIView.EnableView();
         public void Hide() => gameplayUIView.DisableView();
