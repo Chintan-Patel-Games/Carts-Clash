@@ -41,11 +41,7 @@ namespace CartClash.Core.InputSystem
             playerInput.actions.Disable();
         }
 
-        private void Update()
-        {
-            if (!inputEnabled) return;
-            HandleTileHover();
-        }
+        private void Update() => HandleTileHover();
 
         public void ToggleInput(bool value) => inputEnabled = value;
 

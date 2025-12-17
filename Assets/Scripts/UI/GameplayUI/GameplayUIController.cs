@@ -1,3 +1,4 @@
+using CartClash.Core;
 using CartClash.UI.Interface;
 
 namespace CartClash.UI.GameplayUI
@@ -11,12 +12,21 @@ namespace CartClash.UI.GameplayUI
         {
             this.gameplayUIView = gameplayUIView;
             gameplayUIView.SetController(this);
+            gameplayUIView.HideSpawnPanel();
         }
 
         public void SetCurrentTileText(string text) => gameplayUIView.SetCurrentTileText(text);
+        public void SetCurrentStateText(string text) => gameplayUIView.SetCurrentStateText(text);
+
+        public void ShowPlayerSpawnPanel() => gameplayUIView.ShowPlayerSpawnPanel();
+        public void ShowEnemySpawnPanel() => gameplayUIView.ShowEnemySpawnPanel();
+        public void ShowWarningPanel() => gameplayUIView.ShowWarningPanel();
+        public void HideSpawnPanel() => gameplayUIView.HideSpawnPanel();
+
+        public void OnUndoButtonClicked() => GameService.Instance.GameLoopService.OnUndo();
+        public void ToggleUndoButton(bool value) => gameplayUIView.ToggleUndoButton(value);
 
         public void Show() => gameplayUIView.EnableView();
-
         public void Hide() => gameplayUIView.DisableView();
     }
 }

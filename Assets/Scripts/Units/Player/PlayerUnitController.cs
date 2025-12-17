@@ -10,19 +10,19 @@ namespace CartClash.Units.Player
     {
         private PlayerUnitModel unitModel;
         private PlayerUnitView unitView;
+        private PlayerStateMachine stateMachine;
 
         private List<GridNode> path;
-
-        private UnitStates currentState;
-        private PlayerStateMachine stateMachine;
 
         public PlayerUnitController(PlayerUnitModel unitModel, PlayerUnitView unitView)
         {
             this.unitModel = unitModel;
             this.unitView = unitView;
 
-            stateMachine = new PlayerStateMachine(this);
+            stateMachine = new PlayerStateMachine(this);  // Initialize player state machine
             unitView.SetPosition(unitModel.CurrentNode);
+
+            GameService.Instance.GridService.SetOccupied(unitModel.CurrentNode, true); // Register tile occupancy
         }
 
         // Method to be called in Proceed State
@@ -30,8 +30,10 @@ namespace CartClash.Units.Player
         {
             if (path == null || path.Count == 0) return;
 
+            GameService.Instance.GridService.SetOccupied(path[^1], true); // Register tile occupancy
+
             unitView.MoveAlongPath(path, unitModel.MoveSpeed);
-            stateMachine.ChangeState(UnitStates.MOVING);
+            stateMachine.ChangeState(UnitStates.MOVING);  // Changing player state to Moving
 
             // Disabling mouse click input
             GameService.Instance.InputService.ToggleInput(false);
@@ -46,22 +48,31 @@ namespace CartClash.Units.Player
         // Method to be called in Arrived State
         public void OnArrived()
         {
-            unitModel.CurrentNode = path[^1];
-            stateMachine.ChangeState(UnitStates.IDLE);
+            GameService.Instance.GridService.SetOccupied(unitModel.CurrentNode, false); // Release tile occupancy
 
-            GameService.Instance.EventService.StartChasingPlayer.InvokeEvent(unitModel.CurrentNode);
+            unitModel.CurrentNode = path[^1];
+
+            stateMachine.ChangeState(UnitStates.IDLE);  // Changing player state to Idle
+
+            // Invoking event for enemy to start chasing player after player reaches its destination
+            GameService.Instance.EventService.StartChasingPlayer.InvokeEvent();
         }
 
+        // Sets the path for the player to move along
         public void SetPath(List<GridNode> newPath)
         {
             if (newPath == null || newPath.Count == 0) return;
 
             path = newPath;
-            stateMachine.ChangeState(UnitStates.PROCEED);
+            stateMachine.ChangeState(UnitStates.PROCEED);  // Changing player state to Proceed
         }
 
+        // TickUpdate method to be called in Unity Update lifecycle method
         public void TickUpdate() => stateMachine.Update();
 
-        public GridNode CurrentPlayerNode() => unitModel.CurrentNode;
+        // Getter method for fetching current position of player
+        public GridNode GetCurrentPlayerNode() => unitModel.CurrentNode;
+
+        public PlayerUnitView GetUnitView() => unitView;
     }
 }

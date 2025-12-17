@@ -1,3 +1,4 @@
+using CartClash.Core.StateMachine;
 using CartClash.Grid;
 using CartClash.Grid.Tile;
 using UnityEngine;
@@ -29,6 +30,8 @@ namespace CartClash.Core.InputSystem
 
             targetNode = tileView.gridPosition;
 
+            GameLoopState currentState = GameService.Instance.GameLoopService.GetCurrentState();
+            GameService.Instance.GameLoopService.OnTileSelected(currentState, targetNode);
             GameService.Instance.EventService.OnTileSelected.InvokeEvent(targetNode);
         }
 

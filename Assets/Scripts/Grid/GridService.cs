@@ -77,6 +77,18 @@ namespace CartClash.Grid
             gridController.SetTileBlocked(gridPos, value);
         }
 
+        // Sets the occupied state of the tile at the specified grid position
+        public void SetOccupied(GridNode gridPos, bool value)
+        {
+            TileModel tile = gridModel.GetTile(gridPos);
+            if (tile == null) return;
+
+            tile.SetOccupied(value);
+            walkableGrid[gridPos.x, gridPos.y] = IsWalkable(gridPos);
+            gridController.SetTileOccupied(gridPos, value);
+        }
+
+        // Getter method to fetch particular grid position in world position
         public Vector3 GetWorldPosition(GridNode gridPos) => 
             new Vector3(gridPos.x * tileSpacing, 0f, gridPos.y * tileSpacing);
 

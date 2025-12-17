@@ -3,6 +3,7 @@ using CartClash.Core.StateMachine;
 using CartClash.Grid;
 using CartClash.Units.Interface;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace CartClash.Units.Enemy
 {
@@ -13,7 +14,6 @@ namespace CartClash.Units.Enemy
 
         private List<GridNode> path;
 
-        private UnitStates currentState;
         private EnemyStateMachine stateMachine;
 
         public EnemyUnitController(EnemyUnitModel unitModel, EnemyUnitView unitView)
@@ -21,8 +21,10 @@ namespace CartClash.Units.Enemy
             this.unitModel = unitModel;
             this.unitView = unitView;
 
-            stateMachine = new EnemyStateMachine(this);
+            stateMachine = new EnemyStateMachine(this);  // Initialize enemy state machine
             unitView.SetPosition(unitModel.CurrentNode);
+
+            GameService.Instance.GridService.SetOccupied(unitModel.CurrentNode, true); // Register tile occupancy
         }
 
         // Method to be called in Proceed State
@@ -30,8 +32,10 @@ namespace CartClash.Units.Enemy
         {
             if (path == null || path.Count == 0) return;
 
+            GameService.Instance.GridService.SetOccupied(path[^1], true); // Register tile occupancy
+
             unitView.MoveAlongPath(path, unitModel.MoveSpeed);
-            stateMachine.ChangeState(UnitStates.MOVING);
+            stateMachine.ChangeState(UnitStates.MOVING);  // Changing enemy state to Moving
         }
 
         // Method to be called in Moving State
@@ -43,23 +47,32 @@ namespace CartClash.Units.Enemy
         // Method to be called in Arrived State
         public void OnArrived()
         {
+            GameService.Instance.GridService.SetOccupied(unitModel.CurrentNode, false); // Release tile occupancy
+
             unitModel.CurrentNode = path[^1];
             stateMachine.ChangeState(UnitStates.IDLE);
 
             // Enabling mouse click input
             GameService.Instance.InputService.ToggleInput(true);
+
+            GameService.Instance.EventService.SwitchToPlayerTurn.InvokeEvent();
         }
 
+        // Sets the path for the enemy to move along
         public void SetPath(List<GridNode> newPath)
         {
             if (newPath == null || newPath.Count == 0) return;
 
             path = newPath;
-            stateMachine.ChangeState(UnitStates.PROCEED);
+            stateMachine.ChangeState(UnitStates.PROCEED);  // Changing enemy state to Proceed
         }
 
+        // TickUpdate method to be called in Unity Update lifecycle method
         public void TickUpdate() => stateMachine.Update();
 
+        // Getter method for fetching current position of enemy
         public GridNode CurrentEnemyNode() => unitModel.CurrentNode;
+
+        public EnemyUnitView GetUnitView() => unitView;
     }
 }

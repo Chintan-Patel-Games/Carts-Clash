@@ -1,4 +1,7 @@
+using CartClash.AI;
+using CartClash.Core;
 using CartClash.Grid;
+using CartClash.PathFinding;
 using CartClash.Units.Interface;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,29 +12,64 @@ namespace CartClash.Units.Enemy
     {
         private GameObject enemyPrefab;
         private EnemyUnitController unitController;
+        private EnemyUnitAI enemyUnitAI;
 
-        public EnemyUnitService(GameObject enemyPrefab) => this.enemyPrefab = enemyPrefab;
-
-        public void TickUpdate() => unitController.TickUpdate();
-
-        public IUnitController SpawnUnit(GridNode spawnNode)
+        // Constructor to get enemy prefab & initialise enemy AI
+        public EnemyUnitService(GameObject enemyPrefab, PathFindingService pathFindingService)
         {
-            GameObject enemy = Object.Instantiate(enemyPrefab);
-            var view = enemy.GetComponent<EnemyUnitView>();
-
-            if (view == null)
-            {
-                Debug.LogError("EnemyUnitView missing on Enemy prefab");
-                return null;
-            }
-
-            EnemyUnitModel model = new EnemyUnitModel(spawnNode, 3f);
-            unitController = new EnemyUnitController(model, view);
-            return unitController;
+            this.enemyPrefab = enemyPrefab;
+            enemyUnitAI = new EnemyUnitAI(this, pathFindingService);
         }
 
+        // Generates a new path using BFS pathfinding algorithm
+        public List<GridNode> GeneratePath(GridNode targetNode) => enemyUnitAI.GeneratePath(targetNode);
+
+        // TickUpdate method to be called in Unity Update lifecycle method
+        public void TickUpdate()
+        {
+            if (unitController != null)
+                unitController.TickUpdate();
+        }
+
+        public bool CanSpawnUnit(GridNode spawnNode, GridNode targetNode)
+        {
+            List<GridNode> path = enemyUnitAI.GeneratePathFrom(spawnNode, targetNode);
+            return path != null;
+        }
+
+        // Public mehtod to spawn enemy unit
+        public void SpawnUnit(GridNode spawnNode)
+        {
+            GameObject enemy = Object.Instantiate(enemyPrefab);  // Spawns the enemy
+            var view = enemy.GetComponent<EnemyUnitView>();  // Get enemy view class
+
+            if (view == null)  // Check for enemy view null references
+            {
+                Debug.LogError("[EnemyUnitService] : EnemyUnitView missing on Enemy prefab");
+                return;
+            }
+
+            EnemyUnitModel model = new EnemyUnitModel(spawnNode, 3f);  // Initialize enemy model class
+            unitController = new EnemyUnitController(model, view);  // Initialize player controller class
+        }
+        public void DeleteUnit()
+        {
+            if (unitController == null) return;
+
+            var view = unitController.GetUnitView();
+
+            if (view != null)
+                Object.Destroy(view);
+
+            unitController = null;
+        }
+
+        // Global method to set enemy path
         public void SetPath(List<GridNode> path) => unitController.SetPath(path);
 
+        // Global method to get current position of enemy
         public GridNode GetCurrentEnemyNode() => unitController.CurrentEnemyNode();
+
+        public EnemyUnitController GetUnitController() => unitController;
     }
 }
