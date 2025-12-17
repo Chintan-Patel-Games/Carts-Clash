@@ -53,6 +53,8 @@ namespace CartClash.Units.Enemy
 
             // Enabling mouse click input
             GameService.Instance.InputService.ToggleInput(true);
+
+            GameService.Instance.EventService.SwitchToPlayerTurn.InvokeEvent();
         }
 
         // Sets the path for the enemy to move along
@@ -69,5 +71,7 @@ namespace CartClash.Units.Enemy
 
         // Getter method for fetching current position of enemy
         public GridNode CurrentEnemyNode() => unitModel.CurrentNode;
+
+        public EnemyUnitView GetUnitView() => unitView;
     }
 }

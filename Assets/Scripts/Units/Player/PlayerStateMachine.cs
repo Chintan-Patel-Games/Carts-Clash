@@ -16,9 +16,6 @@ namespace CartClash.Units.Player
         // Initializes the player state
         public void Initialize(Enum initialState)
         {
-            if (!States.ContainsKey(initialState))
-                throw new Exception($"[PlayerStatemachine] : State {initialState} not registered.");
-
             currentState = States[initialState];
             currentState.OnEnterState();
         }

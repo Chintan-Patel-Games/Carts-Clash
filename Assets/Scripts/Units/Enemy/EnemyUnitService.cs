@@ -1,4 +1,5 @@
 using CartClash.AI;
+using CartClash.Core;
 using CartClash.Grid;
 using CartClash.PathFinding;
 using CartClash.Units.Interface;
@@ -30,8 +31,14 @@ namespace CartClash.Units.Enemy
                 unitController.TickUpdate();
         }
 
+        public bool CanSpawnUnit(GridNode spawnNode, GridNode targetNode)
+        {
+            List<GridNode> path = enemyUnitAI.GeneratePathFrom(spawnNode, targetNode);
+            return path != null;
+        }
+
         // Public mehtod to spawn enemy unit
-        public IUnitController SpawnUnit(GridNode spawnNode)
+        public void SpawnUnit(GridNode spawnNode)
         {
             GameObject enemy = Object.Instantiate(enemyPrefab);  // Spawns the enemy
             var view = enemy.GetComponent<EnemyUnitView>();  // Get enemy view class
@@ -39,12 +46,22 @@ namespace CartClash.Units.Enemy
             if (view == null)  // Check for enemy view null references
             {
                 Debug.LogError("[EnemyUnitService] : EnemyUnitView missing on Enemy prefab");
-                return null;
+                return;
             }
 
             EnemyUnitModel model = new EnemyUnitModel(spawnNode, 3f);  // Initialize enemy model class
             unitController = new EnemyUnitController(model, view);  // Initialize player controller class
-            return unitController;
+        }
+        public void DeleteUnit()
+        {
+            if (unitController == null) return;
+
+            var view = unitController.GetUnitView();
+
+            if (view != null)
+                Object.Destroy(view);
+
+            unitController = null;
         }
 
         // Global method to set enemy path
@@ -52,5 +69,7 @@ namespace CartClash.Units.Enemy
 
         // Global method to get current position of enemy
         public GridNode GetCurrentEnemyNode() => unitController.CurrentEnemyNode();
+
+        public EnemyUnitController GetUnitController() => unitController;
     }
 }

@@ -6,6 +6,6 @@ namespace CartClash.Units.Interface
     public interface IUnitService
     {
         // Spawns a unit at the specified grid node
-        public IUnitController SpawnUnit(GridNode spawnNode);
+        public void SpawnUnit(GridNode spawnNode);
     }
 }

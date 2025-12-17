@@ -1,5 +1,6 @@
 using CartClash.Command;
 using CartClash.Core.Events;
+using CartClash.Core.GameLoop;
 using CartClash.Core.InputSystem;
 using CartClash.Grid;
 using CartClash.Obstacles;
@@ -43,6 +44,7 @@ namespace CartClash.Core
         public PlayerUnitService PlayerUnitService { get; private set; }
         public EnemyUnitService EnemyUnitService { get; private set; }
         public CommandInvoker CommandInvoker { get; private set; }
+        public GameLoopService GameLoopService { get; private set; }
 
         protected override void Awake()
         {
@@ -54,24 +56,30 @@ namespace CartClash.Core
         {
             EventService = new();
             PathFindingService = new();
-            PlayerUnitService = new(playerPrefab, PathFindingService);
+            PlayerUnitService = new(playerPrefab, PathFindingService, gridService);
             EnemyUnitService = new(enemyPrefab, PathFindingService);
             CommandInvoker = new();
+            GameLoopService = new(PlayerUnitService, EnemyUnitService, CommandInvoker);
         }
+
+        private void OnEnable() => 
+            GameLoopService.SubscribeToEvents();
+
+        private void OnDisable() =>
+            GameLoopService.UnSubscribeToEvents();
 
         private void Start()
         {
             GridService.InitializeGrid();
             ObstacleService.ApplyObstacles();
-
-            PlayerUnitService.SpawnUnit(new GridNode(1,3));
-            EnemyUnitService.SpawnUnit(new GridNode(7,8));
+            GameLoopService.StartGameLoop();
         }
 
         private void Update()
         {
             PlayerUnitService.TickUpdate();
             EnemyUnitService.TickUpdate();
+            GameLoopService.TickUpdate();
         }
     }
 }

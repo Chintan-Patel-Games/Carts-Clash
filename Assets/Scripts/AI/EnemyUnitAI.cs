@@ -19,6 +19,15 @@ namespace CartClash.AI
             this.pathfinder = pathfinder;
         }
 
+        public List<GridNode> GeneratePathFrom(GridNode startNode, GridNode endNode)
+        {
+            bool[,] walkableGrid = GameService.Instance.GridService.GetWalkableGrid;
+
+            walkableGrid[endNode.x, endNode.y] = true;
+
+            return pathfinder.FindPathWithBFS(startNode, endNode, walkableGrid);
+        }
+
         // Generates a new path using BFS pathfinding algorithm
         public List<GridNode> GeneratePath(GridNode targetNode)
         {

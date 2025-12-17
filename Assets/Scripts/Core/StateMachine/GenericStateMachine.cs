@@ -9,6 +9,7 @@ namespace CartClash.Core.StateMachine
     {
         protected TOwner Owner;
         protected IState<TOwner> currentState;
+        protected Enum currentStateKey;
         protected Dictionary<Enum, IState<TOwner>> States = new();
 
         public GenericStateMachine(TOwner Owner) => this.Owner = Owner;
@@ -23,7 +24,7 @@ namespace CartClash.Core.StateMachine
         public void Update() => currentState?.UpdateState();
 
         // Changes state internally
-        private void ChangeState(IState<TOwner> newState)
+        private void ChangeStateInternally(IState<TOwner> newState)
         {
             if (currentState == newState) return;
 
@@ -33,6 +34,15 @@ namespace CartClash.Core.StateMachine
         }
 
         // Global method to change state
-        public void ChangeState(Enum newState) => ChangeState(States[newState]);
+        public void ChangeState(Enum newState)
+        {
+            if (currentStateKey != null && currentStateKey.Equals(newState))
+                return;
+
+            currentStateKey = newState;
+            ChangeStateInternally(States[newState]);
+        }
+
+        public Enum GetCurrentStateKey() => currentStateKey;
     }
 }

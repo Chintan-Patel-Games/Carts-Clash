@@ -55,7 +55,7 @@ namespace CartClash.Units.Player
             stateMachine.ChangeState(UnitStates.IDLE);  // Changing player state to Idle
 
             // Invoking event for enemy to start chasing player after player reaches its destination
-            GameService.Instance.EventService.StartChasingPlayer.InvokeEvent(unitModel.CurrentNode);
+            GameService.Instance.EventService.StartChasingPlayer.InvokeEvent();
         }
 
         // Sets the path for the player to move along
@@ -72,5 +72,7 @@ namespace CartClash.Units.Player
 
         // Getter method for fetching current position of player
         public GridNode GetCurrentPlayerNode() => unitModel.CurrentNode;
+
+        public PlayerUnitView GetUnitView() => unitView;
     }
 }

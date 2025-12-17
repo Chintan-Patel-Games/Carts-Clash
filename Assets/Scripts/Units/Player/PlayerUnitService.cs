@@ -14,10 +14,10 @@ namespace CartClash.Units.Player
         private PlayerUnitAI playerUnitAI;
 
         // Constructor to get player prefab & initialise player AI
-        public PlayerUnitService(GameObject playerPrefab, PathFindingService pathFindingService)
+        public PlayerUnitService(GameObject playerPrefab, PathFindingService pathFindingService, GridService gridService)
         {
             this.playerPrefab = playerPrefab;
-            playerUnitAI = new PlayerUnitAI(this, pathFindingService);
+            playerUnitAI = new PlayerUnitAI(this, pathFindingService, gridService);
         }
 
         // Generates a new path using BFS pathfinding algorithm
@@ -31,7 +31,7 @@ namespace CartClash.Units.Player
         }
 
         // Public mehtod to spawn player unit
-        public IUnitController SpawnUnit(GridNode spawnNode)
+        public void SpawnUnit(GridNode spawnNode)
         {
             GameObject player = Object.Instantiate(playerPrefab);  // Spawns the player
             var view = player.GetComponent<PlayerUnitView>();  // Get player view class
@@ -39,12 +39,23 @@ namespace CartClash.Units.Player
             if (view == null)  // Check for player view null references
             {
                 Debug.LogError("[PlayerUnitService] : PlayerUnitView missing on Player prefab");
-                return null;
+                return;
             }
 
             PlayerUnitModel model = new PlayerUnitModel(spawnNode, 3f);  // Initialize player model class
             unitController = new PlayerUnitController(model, view);  // Initialize player controller class
-            return unitController;
+        }
+
+        public void DeleteUnit()
+        {
+            if (unitController == null) return;
+
+            var view = unitController.GetUnitView();
+
+            if (view != null)
+                Object.Destroy(view);
+
+            unitController = null;
         }
 
         // Global method to set player path
