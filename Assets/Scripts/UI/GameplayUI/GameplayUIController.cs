@@ -24,6 +24,7 @@ namespace CartClash.UI.GameplayUI
         public void HideSpawnPanel() => gameplayUIView.HideSpawnPanel();
 
         public void OnUndoButtonClicked() => GameService.Instance.GameLoopService.OnUndo();
+        public void ToggleUndoButton(bool value) => gameplayUIView.ToggleUndoButton(value);
 
         public void Show() => gameplayUIView.EnableView();
         public void Hide() => gameplayUIView.DisableView();

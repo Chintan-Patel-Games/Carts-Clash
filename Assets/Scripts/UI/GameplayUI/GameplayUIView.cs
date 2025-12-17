@@ -37,9 +37,10 @@ namespace CartClash.UI.GameplayUI
         {
             controller = controllerToSet as GameplayUIController;
             undoBtn.onClick.AddListener(controller.OnUndoButtonClicked);
+            ToggleUndoButton(false);
         }
 
-        public void ToggleUndoButton(bool toggle) => undoBtn.enabled = toggle;
+        public void ToggleUndoButton(bool toggle) => undoBtn.interactable = toggle;
 
         public void SetCurrentTileText(string text) => currentTileText.SetText(text);
 

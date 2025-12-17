@@ -1,3 +1,4 @@
+using CartClash.Core;
 using CartClash.Grid;
 using CartClash.Units.Player;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace CartClash.Command
         public bool CanExecute()
         {
             path = unitService.GeneratePath(endNode);
+
+            if (path == null) GameService.Instance.UIService.ToggleUndoButton(true);
             return path != null && path.Count > 0;
         }
 

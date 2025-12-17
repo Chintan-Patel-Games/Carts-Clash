@@ -79,6 +79,7 @@ namespace CartClash.Core.GameLoop
 
         private void ProcessPlayerSpawn(GridNode spawnNode)
         {
+            GameService.Instance.UIService.ToggleUndoButton(false);
             playerSpawnNode = spawnNode;
 
             ICommand commandToProcess = new SpawnPlayerCommand(playerService, playerSpawnNode);
@@ -107,12 +108,14 @@ namespace CartClash.Core.GameLoop
 
         private void ProcessPlayerTurn(GridNode targetNode)
         {
+            GameService.Instance.UIService.ToggleUndoButton(false);
             ICommand commandToProcess = new PlayerMoveCommand(playerService, targetNode);
             commandInvoker.ProcessCommand(commandToProcess);
         }
 
         public void ProcessEnemyTurn()
         {
+            GameService.Instance.UIService.ToggleUndoButton(false);
             stateMachine.ChangeState(GameLoopState.ENEMY_TURN);
             GameService.Instance.UIService.UpdateCurrentStateText(GameLoopState.ENEMY_TURN.ToString());
 
@@ -122,6 +125,7 @@ namespace CartClash.Core.GameLoop
 
         public void SwitchToPlayerTurn()
         {
+            GameService.Instance.UIService.ToggleUndoButton(true);
             stateMachine.ChangeState(GameLoopState.PLAYER_TURN);
             GameService.Instance.UIService.UpdateCurrentStateText(GameLoopState.PLAYER_TURN.ToString());
         }

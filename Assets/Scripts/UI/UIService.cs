@@ -18,6 +18,8 @@ public class UIService : MonoBehaviour
     public void UpdateCurrentStateText(string text) =>
         gameplayUIController.SetCurrentStateText(text);
 
+    public void ToggleUndoButton(bool value) => gameplayUIController.ToggleUndoButton(value);
+
     public void ShowPlayerSpawnPanel() => gameplayUIController.ShowPlayerSpawnPanel();
     public void ShowEnemySpawnPanel() => gameplayUIController.ShowEnemySpawnPanel();
     public void ShowWarningPanel() => gameplayUIController.ShowWarningPanel();
