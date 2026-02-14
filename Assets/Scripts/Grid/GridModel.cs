@@ -14,7 +14,7 @@ namespace CartClash.Grid
         public bool HasTile(GridNode position) => tiles.ContainsKey(position);
 
         // Adds a new tile to the grid
-        public void AddTile(TileModel tile) => tiles[tile.tilePosition] = tile;
+        public void AddTile(TileModel tile) => tiles[tile.TilePosition] = tile;
 
         // Getter nethod for a tile at the given position
         public TileModel GetTile(GridNode position)

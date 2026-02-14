@@ -28,7 +28,7 @@ namespace CartClash.Core.InputSystem
             targetNode = default;
             if (tileView == null) return;
 
-            targetNode = tileView.gridPosition;
+            targetNode = tileView.GridPosition;
 
             GameLoopState currentState = GameService.Instance.GameLoopService.GetCurrentState();
             GameService.Instance.GameLoopService.OnTileSelected(currentState, targetNode);
@@ -46,7 +46,7 @@ namespace CartClash.Core.InputSystem
             TileView tileView = GetTileFromMousePos();
             if (tileView == null) return false;
 
-            tilePos = tileView.gridPosition;
+            tilePos = tileView.GridPosition;
             tileState = tileView.GetTileState().ToString();
             return true;
         }

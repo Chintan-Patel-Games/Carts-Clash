@@ -2,7 +2,6 @@ using CartClash.Grid;
 using CartClash.PathFinding;
 using CartClash.Units.Player;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace CartClash.AI
 {

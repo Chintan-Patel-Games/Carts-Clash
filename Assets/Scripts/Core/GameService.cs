@@ -62,11 +62,9 @@ namespace CartClash.Core
             GameLoopService = new(PlayerUnitService, EnemyUnitService, CommandInvoker);
         }
 
-        private void OnEnable() => 
-            GameLoopService.SubscribeToEvents();
+        private void OnEnable() => GameLoopService.SubscribeToEvents();
 
-        private void OnDisable() =>
-            GameLoopService.UnSubscribeToEvents();
+        private void OnDisable() =>GameLoopService.UnSubscribeToEvents();
 
         private void Start()
         {

@@ -9,7 +9,6 @@ namespace CartClash.Core.GameLoop
         public GameLoopStateMachine(GameLoopController Owner) : base(Owner)
         {
             CreateStates();
-            SetOwner();
         }
 
         // Initializes the game loop state
