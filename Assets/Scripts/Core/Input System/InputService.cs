@@ -32,12 +32,12 @@ namespace CartClash.Core.InputSystem
         private void OnEnable()
         {
             playerInput.actions.Enable();
-            clickAction.performed += OnClickStarted;
+            clickAction.performed += OnLMBClicked;
         }
 
         private void OnDisable()
         {
-            clickAction.performed -= OnClickStarted;
+            clickAction.performed -= OnLMBClicked;
             playerInput.actions.Disable();
         }
 
@@ -45,8 +45,8 @@ namespace CartClash.Core.InputSystem
 
         public void ToggleInput(bool value) => inputEnabled = value;
 
-        // Handles the logic for mouse click
-        private void OnClickStarted(InputAction.CallbackContext context)
+        // Handles the logic for Left Mouse Button click
+        private void OnLMBClicked(InputAction.CallbackContext context)
         {
             if (!inputEnabled) return;
             inputController.HandleClick(out GridNode targetNode);

@@ -63,7 +63,7 @@ namespace CartClash.Grid
         {
             TileModel tile = gridModel.GetTile(gridPos);
             if (tile == null) return false;
-            return tile.isWalkable && !tile.isOccupied;
+            return tile.IsWalkable && !tile.IsOccupied;
         }
 
         // Sets the blocked state of the tile at the specified grid position
