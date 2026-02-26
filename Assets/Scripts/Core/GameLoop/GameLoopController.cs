@@ -14,6 +14,8 @@ namespace CartClash.Core.GameLoop
         private EnemyUnitService enemyService;
         private CommandInvoker commandInvoker;
 
+        private GameService gameService = GameService.Instance;
+
         private GridNode playerSpawnNode;
         private GridNode enemySpawnNode;
 
@@ -28,31 +30,29 @@ namespace CartClash.Core.GameLoop
 
         public void SubscribeToEvents()
         {
-            GameService.Instance.EventService.StartChasingPlayer.AddListener(ProcessEnemyTurn);
-            GameService.Instance.EventService.SwitchToPlayerTurn.AddListener(SwitchToPlayerTurn);
+            gameService.EventService.StartChasingPlayer.AddListener(ProcessEnemyTurn);
+            gameService.EventService.SwitchToPlayerTurn.AddListener(SwitchToPlayerTurn);
         }
 
         public void UnSubscribeToEvents()
         {
-            GameService.Instance.EventService.StartChasingPlayer.RemoveListener(ProcessEnemyTurn);
-            GameService.Instance.EventService.SwitchToPlayerTurn.RemoveListener(SwitchToPlayerTurn);
+            gameService.EventService.StartChasingPlayer.RemoveListener(ProcessEnemyTurn);
+            gameService.EventService.SwitchToPlayerTurn.RemoveListener(SwitchToPlayerTurn);
         }
 
         public void StartGame()
         {
             stateMachine.Initialize(GameLoopState.SELECT_PLAYER_SPAWN);
-            GameService.Instance.UIService.UpdateCurrentStateText(GameLoopState.SELECT_PLAYER_SPAWN.ToString());
+            gameService.UIService.UpdateCurrentStateText(GameLoopState.SELECT_PLAYER_SPAWN.ToString());
         }
 
-        public void PlayerSpawnState() =>
-            GameService.Instance.UIService.ShowPlayerSpawnPanel();
+        public void PlayerSpawnState() => gameService.UIService.ShowPlayerSpawnPanel();
 
-        public void EnemySpawnState() =>
-            GameService.Instance.UIService.ShowEnemySpawnPanel();
+        public void EnemySpawnState() => gameService.UIService.ShowEnemySpawnPanel();
 
         public void OnTileSelected(GameLoopState state, GridNode node)
         {
-            if (!GameService.Instance.GridService.IsWalkable(node)) return;
+            if (!gameService.GridService.IsWalkable(node)) return;
 
             switch (state)
             {
@@ -74,18 +74,17 @@ namespace CartClash.Core.GameLoop
             }
         }
 
-        public void OnPlayerTurn() =>
-            GameService.Instance.UIService.HideSpawnPanel();
+        public void OnPlayerTurn() => gameService.UIService.HideSpawnPanel();
 
         private void ProcessPlayerSpawn(GridNode spawnNode)
         {
-            GameService.Instance.UIService.ToggleUndoButton(false);
+            gameService.UIService.ToggleUndoButton(false);
             playerSpawnNode = spawnNode;
 
             ICommand commandToProcess = new SpawnPlayerCommand(playerService, playerSpawnNode);
             commandInvoker.ProcessCommand(commandToProcess);
             stateMachine.ChangeState(GameLoopState.SELECT_ENEMY_SPAWN);
-            GameService.Instance.UIService.UpdateCurrentStateText(GameLoopState.SELECT_ENEMY_SPAWN.ToString());
+            gameService.UIService.UpdateCurrentStateText(GameLoopState.SELECT_ENEMY_SPAWN.ToString());
         }
 
         private bool TryProcessEnemySpawn(GridNode spawnNode)
@@ -102,22 +101,22 @@ namespace CartClash.Core.GameLoop
             }
 
             stateMachine.ChangeState(GameLoopState.PLAYER_TURN);
-            GameService.Instance.UIService.UpdateCurrentStateText(GameLoopState.PLAYER_TURN.ToString());
+            gameService.UIService.UpdateCurrentStateText(GameLoopState.PLAYER_TURN.ToString());
             return true;
         }
 
         private void ProcessPlayerTurn(GridNode targetNode)
         {
-            GameService.Instance.UIService.ToggleUndoButton(false);
+            gameService.UIService.ToggleUndoButton(false);
             ICommand commandToProcess = new PlayerMoveCommand(playerService, targetNode);
             commandInvoker.ProcessCommand(commandToProcess);
         }
 
         public void ProcessEnemyTurn()
         {
-            GameService.Instance.UIService.ToggleUndoButton(false);
+            gameService.UIService.ToggleUndoButton(false);
             stateMachine.ChangeState(GameLoopState.ENEMY_TURN);
-            GameService.Instance.UIService.UpdateCurrentStateText(GameLoopState.ENEMY_TURN.ToString());
+            gameService.UIService.UpdateCurrentStateText(GameLoopState.ENEMY_TURN.ToString());
 
             ICommand commandToProcess = new EnemyChaseCommand(enemyService, playerService.GetCurrentPlayerNode());
             commandInvoker.ProcessCommand(commandToProcess);
@@ -125,16 +124,16 @@ namespace CartClash.Core.GameLoop
 
         public void SwitchToPlayerTurn()
         {
-            GameService.Instance.UIService.ToggleUndoButton(true);
+            gameService.UIService.ToggleUndoButton(true);
             stateMachine.ChangeState(GameLoopState.PLAYER_TURN);
-            GameService.Instance.UIService.UpdateCurrentStateText(GameLoopState.PLAYER_TURN.ToString());
+            gameService.UIService.UpdateCurrentStateText(GameLoopState.PLAYER_TURN.ToString());
         }
 
         public void OnUndo()
         {
-            GameService.Instance.CommandInvoker.Undo();
+            gameService.CommandInvoker.Undo();
             stateMachine.ChangeState(GameLoopState.UNDO);
-            GameService.Instance.UIService.UpdateCurrentStateText(GameLoopState.UNDO.ToString());
+            gameService.UIService.UpdateCurrentStateText(GameLoopState.UNDO.ToString());
         }
 
         public void TickUpdate() => stateMachine.Update();

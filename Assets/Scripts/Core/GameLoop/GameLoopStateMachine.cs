@@ -9,13 +9,11 @@ namespace CartClash.Core.GameLoop
         public GameLoopStateMachine(GameLoopController Owner) : base(Owner)
         {
             CreateStates();
+            SetOwner();
         }
 
         // Initializes the game loop state
-        public void Initialize(Enum initialState)
-        {
-            ChangeState(initialState);
-        }
+        public void Initialize(Enum initialState) => ChangeState(initialState);
 
         // Creating the necessary states to be used by GameLoopStateMachine
         private void CreateStates()

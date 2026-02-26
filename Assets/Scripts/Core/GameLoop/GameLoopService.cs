@@ -10,13 +10,8 @@ namespace CartClash.Core.GameLoop
     {
         private GameLoopController controller;
 
-        public GameLoopService(
-            PlayerUnitService playerService,
-            EnemyUnitService enemyService,
-            CommandInvoker commandInvoker)
-        {
+        public GameLoopService(PlayerUnitService playerService, EnemyUnitService enemyService, CommandInvoker commandInvoker) =>
             controller = new(playerService, enemyService, commandInvoker);
-        }
 
         public void StartGameLoop() => controller.StartGame();
 
