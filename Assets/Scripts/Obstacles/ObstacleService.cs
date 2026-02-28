@@ -27,10 +27,10 @@ namespace CartClash.Obstacles
 
                     GridNode gridPos = new(x, y);
 
-                    if (!GridService.Instance.IsWalkable(gridPos)) continue;
+                    if (!GridService.Instance.IsTileWalkable(gridPos)) continue;
 
                     SpawnObstacle(gridPos);
-                    GridService.Instance.SetBlocked(gridPos, true);
+                    GridService.Instance.SetTileBlocked(gridPos, true);
                 }
             }
         }

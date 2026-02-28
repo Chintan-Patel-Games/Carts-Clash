@@ -6,7 +6,7 @@ namespace CartClash.Core.GameLoop.States
     {
         public T Owner { get; set; }
 
-        public void OnEnterState() => Owner.ProcessEnemyTurn();
+        public void OnEnterState() => Owner.BeginEnemyTurn();
         public void UpdateState() { }
         public void OnExitState() { }
     }

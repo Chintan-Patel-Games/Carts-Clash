@@ -56,7 +56,7 @@ namespace CartClash.Core
         {
             EventService = new();
             PathFindingService = new();
-            PlayerUnitService = new(playerPrefab, PathFindingService, gridService);
+            PlayerUnitService = new(playerPrefab, PathFindingService);
             EnemyUnitService = new(enemyPrefab, PathFindingService);
             CommandInvoker = new();
             GameLoopService = new(PlayerUnitService, EnemyUnitService, CommandInvoker);

@@ -1,6 +1,6 @@
 using CartClash.Core.StateMachine;
 using CartClash.Grid;
-using CartClash.Grid.Tile;
+using CartClash.Grid.Tile.View;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -28,7 +28,7 @@ namespace CartClash.Core.InputSystem
             targetNode = default;
             if (tileView == null) return;
 
-            targetNode = tileView.GridPosition;
+            targetNode = tileView.TilePosition;
 
             GameLoopState currentState = GameService.Instance.GameLoopService.GetCurrentState();
             GameService.Instance.GameLoopService.OnTileSelected(currentState, targetNode);
@@ -46,8 +46,8 @@ namespace CartClash.Core.InputSystem
             TileView tileView = GetTileFromMousePos();
             if (tileView == null) return false;
 
-            tilePos = tileView.GridPosition;
-            tileState = tileView.GetTileState().ToString();
+            tilePos = tileView.TilePosition;
+            tileState = GridService.Instance.GetTileState(tilePos).ToString();
             return true;
         }
 

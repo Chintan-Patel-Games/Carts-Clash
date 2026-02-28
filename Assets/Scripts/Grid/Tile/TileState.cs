@@ -6,9 +6,9 @@ namespace CartClash.Grid.Tile
     public enum TileState
     {
         /// <summary>
-        /// Tile is empty and walkable.
+        /// Tile is  walkable.
         /// </summary>
-        DEFAULT,
+        WALKABLE,
 
         /// <summary>
         /// Tile is currently occupied by a unit.

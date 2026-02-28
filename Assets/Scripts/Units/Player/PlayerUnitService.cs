@@ -14,10 +14,10 @@ namespace CartClash.Units.Player
         private PlayerUnitAI playerUnitAI;
 
         // Constructor to get player prefab & initialise player AI
-        public PlayerUnitService(GameObject playerPrefab, PathFindingService pathFindingService, GridService gridService)
+        public PlayerUnitService(GameObject playerPrefab, PathFindingService pathFindingService)
         {
             this.playerPrefab = playerPrefab;
-            playerUnitAI = new PlayerUnitAI(this, pathFindingService, gridService);
+            playerUnitAI = new PlayerUnitAI(this, pathFindingService);
         }
 
         // Generates a new path using BFS pathfinding algorithm
@@ -53,7 +53,7 @@ namespace CartClash.Units.Player
             var view = unitController.GetUnitView();
 
             if (view != null)
-                Object.Destroy(view);
+                Object.Destroy(view.gameObject);
 
             unitController = null;
         }

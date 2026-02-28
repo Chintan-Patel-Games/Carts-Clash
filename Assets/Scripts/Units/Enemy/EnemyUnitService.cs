@@ -1,5 +1,4 @@
 using CartClash.AI;
-using CartClash.Core;
 using CartClash.Grid;
 using CartClash.PathFinding;
 using CartClash.Units.Interface;
@@ -59,7 +58,7 @@ namespace CartClash.Units.Enemy
             var view = unitController.GetUnitView();
 
             if (view != null)
-                Object.Destroy(view);
+                Object.Destroy(view.gameObject);
 
             unitController = null;
         }
@@ -69,7 +68,5 @@ namespace CartClash.Units.Enemy
 
         // Global method to get current position of enemy
         public GridNode GetCurrentEnemyNode() => unitController.CurrentEnemyNode();
-
-        public EnemyUnitController GetUnitController() => unitController;
     }
 }
