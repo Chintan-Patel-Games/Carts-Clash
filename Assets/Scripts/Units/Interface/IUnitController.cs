@@ -1,17 +1,18 @@
 using CartClash.Grid;
 using System.Collections.Generic;
 
-namespace CartClash.Units.Interface
+namespace CartClash.Units.Interface.Controller
 {
-    // Interface for unit controllers
+    /// <summary>
+    /// Defines the contract for controlling the movement and arrival behavior of a unit
+    /// within a grid-based environment.
+    /// </summary>
     public interface IUnitController
     {
         public void StartMove();
         public bool UpdateMovement();
         public void RequestArrived();
         public void OnArrived();
-
-        // Sets the path for the unit to follow
         public void SetPath(List<GridNode> path);
         public void TickUpdate();
     }

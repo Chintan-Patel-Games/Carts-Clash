@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using CartClash.Obstacles.SO;
 
 namespace CartClash.Obstacles
 {

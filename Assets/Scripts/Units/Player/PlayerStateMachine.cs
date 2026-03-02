@@ -4,6 +4,9 @@ using System;
 
 namespace CartClash.Units.Player
 {
+    /// <summary>
+    /// Represents a state machine for managing the states of a player unit within the game.
+    /// </summary>
     public class PlayerStateMachine : GenericStateMachine<PlayerUnitController>
     {
         public PlayerStateMachine(PlayerUnitController Owner) : base(Owner)
@@ -13,14 +16,12 @@ namespace CartClash.Units.Player
             Initialize(UnitStates.IDLE);
         }
 
-        // Initializes the player state
         public void Initialize(Enum initialState)
         {
             currentState = States[initialState];
             currentState.OnEnterState();
         }
 
-        // Creating the necessary states to be used by PlayerStateMachine
         private void CreateStates()
         {
             States.Add(UnitStates.IDLE, new UnitIdleState<PlayerUnitController>());

@@ -20,7 +20,7 @@ namespace CartClash.Command
         // Check to execute command or not
         public bool CanExecute()
         {
-            if (!unitService.CanSpawnUnit(spawnNode, targetNode))
+            if (!unitService.CanGeneratePath(spawnNode, targetNode))
             {
                 GameService.Instance.UIService.ShowWarningPanel();
                 return false;

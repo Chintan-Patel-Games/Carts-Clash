@@ -1,7 +1,9 @@
+using CartClash.Core;
 using CartClash.Grid;
 using CartClash.PathFinding;
 using CartClash.Units.Player;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace CartClash.AI
 {
@@ -24,11 +26,15 @@ namespace CartClash.AI
 
             GridNode startNode = player.GetCurrentPlayerNode();
 
-            bool[,] walkableGrid = GridService.Instance.GetWalkableGrid();
+            bool[,] walkableGrid = GameService.Instance.GridService.GetWalkableGrid();
 
             var path = pathfinder.FindPathWithBFS(startNode, targetNode, walkableGrid);
 
-            if (path == null || path.Count == 0) return null;
+            if (path == null || path.Count == 0)
+            {
+                Debug.LogWarning("No path found for player unit.");
+                return null;
+            }
 
             return path;
         }

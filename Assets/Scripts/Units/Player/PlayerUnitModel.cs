@@ -1,17 +1,10 @@
 using CartClash.Grid;
-using CartClash.Units.Interface;
+using CartClash.Units.Base.Model;
 
 namespace CartClash.Units.Player
 {
-    public class PlayerUnitModel : IUnitModel
+    public class PlayerUnitModel : UnitModel
     {
-        public GridNode CurrentNode { get; set; }
-        public float MoveSpeed { get; set; }
-
-        public PlayerUnitModel(GridNode startNode, float speed)
-        {
-            CurrentNode = startNode;
-            MoveSpeed = speed;
-        }
+        public PlayerUnitModel(GridNode startNode, float speed) : base (startNode, speed) { }
     }
 }

@@ -1,14 +1,13 @@
 using CartClash.Grid;
 
-namespace CartClash.Units.Interface
+namespace CartClash.Units.Interface.Model
 {
-    // Interface for unit models
+    /// <summary>
+    /// Defines the contract for a unit's position and movement speed within a grid-based environment.
+    /// </summary>
     public interface IUnitModel
     {
-        // The current position of the unit in grid coordinates
         public GridNode CurrentNode { get; set; }
-
-        // The movement speed of the unit
         public float MoveSpeed { get; set; }
     }
 }

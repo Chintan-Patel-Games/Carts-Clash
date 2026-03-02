@@ -4,6 +4,9 @@ using System;
 
 namespace CartClash.Units.Enemy
 {
+    /// <summary>
+    /// Represents a state machine for managing the states of a player unit within the game.
+    /// </summary>
     public class EnemyStateMachine : GenericStateMachine<EnemyUnitController>
     {
         public EnemyStateMachine(EnemyUnitController Owner) : base(Owner)
@@ -13,17 +16,12 @@ namespace CartClash.Units.Enemy
             Initialize(UnitStates.IDLE);
         }
 
-        // Initializes the enemy state
         public void Initialize(Enum initialState)
         {
-            if (!States.ContainsKey(initialState))
-                throw new Exception($"[EnemyStatemachine] : State {initialState} not registered.");
-
             currentState = States[initialState];
             currentState.OnEnterState();
         }
 
-        // Creating the necessary states to be used by EnemyStateMachine
         private void CreateStates()
         {
             States.Add(UnitStates.IDLE, new UnitIdleState<EnemyUnitController>());

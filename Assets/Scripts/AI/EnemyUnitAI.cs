@@ -43,7 +43,11 @@ namespace CartClash.AI
 
             var path = pathfinder.FindPathWithBFS(startNode, chaseNode.Value, walkableGrid);
 
-            if (path == null || path.Count == 0) return null;
+            if (path == null || path.Count == 0)
+            {
+                Debug.LogWarning("No path found for enemy unit.");
+                return null;
+            }
 
             return path;
         }

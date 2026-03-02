@@ -1,9 +1,10 @@
 using CartClash.Grid;
 using CartClash.Utilities;
+using CartClash.Core.InputSystem.Controller;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace CartClash.Core.InputSystem
+namespace CartClash.Core.InputSystem.Service
 {
     public class InputService : GenericMonoSingleton<InputService>
     {

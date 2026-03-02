@@ -2,9 +2,10 @@ using CartClash.Grid.Tile;
 using CartClash.Grid.Tile.Controller;
 using CartClash.Grid.Tile.Model;
 using CartClash.Grid.Tile.View;
+using CartClash.Grid.Model;
 using System.Collections.Generic;
 
-namespace CartClash.Grid
+namespace CartClash.Grid.Controller
 {
     /// <summary>
     /// Provides functionality for managing tiles within a grid, including creation, state updates, and querying tile

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using CartClash.Grid.Tile.Model;
 
-namespace CartClash.Grid
+namespace CartClash.Grid.Model
 {
     /// <summary>
     /// Represents a grid structure that manages a collection of tiles, each identified by a grid position.

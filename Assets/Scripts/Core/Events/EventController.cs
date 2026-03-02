@@ -1,6 +1,6 @@
 using System;
 
-namespace CartClash.Core.Events
+namespace CartClash.Core.Events.Controller
 {
     public class EventController
     {

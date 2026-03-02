@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CartClash.Obstacles
+namespace CartClash.Obstacles.SO
 {
     /// <summary>
     /// Represents a grid-based obstacle configuration for use in Unity scenes, defining blocked and unblocked tiles

@@ -1,78 +1,40 @@
 using CartClash.Core;
 using CartClash.Core.StateMachine;
 using CartClash.Grid;
-using CartClash.Units.Interface;
-using System.Collections.Generic;
-using UnityEngine;
+using CartClash.Units.Base.Controller;
 
 namespace CartClash.Units.Enemy
 {
-    public class EnemyUnitController : IUnitController
+    public class EnemyUnitController : UnitController<EnemyUnitModel, EnemyUnitView>
     {
-        private EnemyUnitModel unitModel;
-        private EnemyUnitView unitView;
-
-        private List<GridNode> path;
-
+        /// <summary>
+        /// Provides control logic for a enemy-controlled unit, managing its state transitions, movement, and interactions
+        /// within the game environment.
+        /// </summary>
         private EnemyStateMachine stateMachine;
+        private GameService gameService => GameService.Instance;
 
-        public EnemyUnitController(EnemyUnitModel unitModel, EnemyUnitView unitView)
-        {
-            this.unitModel = unitModel;
-            this.unitView = unitView;
-
+        public EnemyUnitController(EnemyUnitModel model, EnemyUnitView view) : base(model, view) =>
             stateMachine = new EnemyStateMachine(this);  // Initialize enemy state machine
-            unitView.SetPosition(unitModel.CurrentNode);
 
-            GameService.Instance.GridService.SetOccupied(unitModel.CurrentNode, true); // Register tile occupancy
-        }
+        protected override void ChangeState(UnitStates newState) => stateMachine.ChangeState(newState);
 
-        // Method to be called in Proceed State
-        public void StartMove()
+        protected override void UpdateStateMachine() => stateMachine.Update();
+
+        /// <summary>
+        /// Disables user input at the start of a move operation.
+        /// </summary>
+        protected override void OnStartMoveInternal() => gameService.InputService.ToggleInput(false);
+
+        /// <summary>
+        /// Handles the arrival event by transitioning the game state to the player's turn.
+        /// </summary>
+        protected override void OnArrivedInternal()
         {
-            if (path == null || path.Count == 0) return;
-
-            GameService.Instance.GridService.SetOccupied(path[^1], true); // Register tile occupancy
-
-            unitView.MoveAlongPath(path, unitModel.MoveSpeed);
-            stateMachine.ChangeState(UnitStates.MOVING);  // Changing enemy state to Moving
+            gameService.EventService.SwitchToPlayerTurn.InvokeEvent();
+            gameService.InputService.ToggleInput(true);
         }
 
-        // Method to be called in Moving State
-        public bool UpdateMovement() => unitView.IsMovingComplete();
-
-        // Method to be called in Arrived State to check arrived or not
-        public void RequestArrived() => stateMachine.ChangeState(UnitStates.ARRIVED);
-
-        // Method to be called in Arrived State
-        public void OnArrived()
-        {
-            GameService.Instance.GridService.SetOccupied(unitModel.CurrentNode, false); // Release tile occupancy
-
-            unitModel.CurrentNode = path[^1];
-            stateMachine.ChangeState(UnitStates.IDLE);
-
-            // Enabling mouse click input
-            GameService.Instance.InputService.ToggleInput(true);
-
-            GameService.Instance.EventService.SwitchToPlayerTurn.InvokeEvent();
-        }
-
-        // Sets the path for the enemy to move along
-        public void SetPath(List<GridNode> newPath)
-        {
-            if (newPath == null || newPath.Count == 0) return;
-
-            path = newPath;
-            stateMachine.ChangeState(UnitStates.PROCEED);  // Changing enemy state to Proceed
-        }
-
-        // TickUpdate method to be called in Unity Update lifecycle method
-        public void TickUpdate() => stateMachine.Update();
-
-        // Getter method for fetching current position of enemy
-        public GridNode CurrentEnemyNode() => unitModel.CurrentNode;
-
-        public EnemyUnitView GetUnitView() => unitView;
+        public GridNode GetCurrentEnemyNode() => GetCurrentNode();
     }
 }

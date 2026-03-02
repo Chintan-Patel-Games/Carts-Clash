@@ -1,9 +1,11 @@
 using CartClash.Grid.Tile;
 using CartClash.Grid.Tile.View;
+using CartClash.Grid.Controller;
+using CartClash.Grid.Model;
 using CartClash.Utilities;
 using UnityEngine;
 
-namespace CartClash.Grid
+namespace CartClash.Grid.Service
 {
     /// <summary>
     /// Provides centralized management and operations for a grid-based environment, including grid initialization,

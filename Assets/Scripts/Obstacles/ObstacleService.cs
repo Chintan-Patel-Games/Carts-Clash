@@ -1,8 +1,10 @@
+using CartClash.Core;
 using CartClash.Grid;
 using CartClash.Utilities;
 using UnityEngine;
+using CartClash.Obstacles.SO;
 
-namespace CartClash.Obstacles
+namespace CartClash.Obstacles.Service
 {
     /// <summary>
     /// Provides functionality for applying and spawning obstacles within the grid, using configuration data and prefab
@@ -33,17 +35,17 @@ namespace CartClash.Obstacles
 
                     GridNode gridPos = new(x, y);
 
-                    if (!GridService.Instance.IsTileWalkable(gridPos)) continue;
+                    if (!GameService.Instance.GridService.IsTileWalkable(gridPos)) continue;
 
                     SpawnObstacle(gridPos);
-                    GridService.Instance.SetTileBlocked(gridPos, true);
+                    GameService.Instance.GridService.SetTileBlocked(gridPos, true);
                 }
             }
         }
 
         public void SpawnObstacle(GridNode gridPos)
         {
-            Vector3 worldPos = GridService.Instance.GetWorldPosition(gridPos);
+            Vector3 worldPos = GameService.Instance.GridService.GetWorldPosition(gridPos);
             GameObject prefab = obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)];
             Instantiate(prefab, worldPos, Quaternion.identity, obstacleParent);
         }

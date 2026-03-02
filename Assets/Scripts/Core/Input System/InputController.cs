@@ -4,7 +4,7 @@ using CartClash.Grid.Tile.View;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace CartClash.Core.InputSystem
+namespace CartClash.Core.InputSystem.Controller
 {
     // Controller for handling player input
     public class InputController
@@ -47,7 +47,7 @@ namespace CartClash.Core.InputSystem
             if (tileView == null) return false;
 
             tilePos = tileView.TilePosition;
-            tileState = GridService.Instance.GetTileState(tilePos).ToString();
+            tileState = GameService.Instance.GridService.GetTileState(tilePos).ToString();
             return true;
         }
 
