@@ -1,6 +1,8 @@
 using CartClash.Grid;
+using CartClash.Core.Events.Controller;
+using CartClash.Core.Events.Controllers;
 
-namespace CartClash.Core.Events
+namespace CartClash.Core.Events.Service
 {
     public class EventService
     {

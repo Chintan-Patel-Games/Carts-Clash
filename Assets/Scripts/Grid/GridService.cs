@@ -1,10 +1,16 @@
 using CartClash.Grid.Tile;
+using CartClash.Grid.Tile.View;
+using CartClash.Grid.Controller;
+using CartClash.Grid.Model;
 using CartClash.Utilities;
 using UnityEngine;
 
-namespace CartClash.Grid
+namespace CartClash.Grid.Service
 {
-    // Service responsible for initializing and managing the grid
+    /// <summary>
+    /// Provides centralized management and operations for a grid-based environment, including grid initialization,
+    /// tile state control, and position calculations.
+    /// </summary>
     public class GridService : GenericMonoSingleton<GridService>
     {
         [Header("Grid")]
@@ -16,8 +22,6 @@ namespace CartClash.Grid
         [SerializeField] private TileView tilePrefab;
         [SerializeField] private Transform tileParent;
 
-        private bool[,] walkableGrid;
-
         private GridModel gridModel;
         private GridController gridController;
 
@@ -25,12 +29,10 @@ namespace CartClash.Grid
         {
             base.Awake();
 
-            walkableGrid = new bool[gridX, gridZ];
             gridModel = new GridModel();
-            gridController = new GridController();
+            gridController = new GridController(gridModel);
         }
 
-        // Initializes the grid by creating tiles based on the specified dimensions
         public void InitializeGrid()
         {
             for (int x = 0; x < gridX; x++)
@@ -38,60 +40,24 @@ namespace CartClash.Grid
                 for (int z = 0; z < gridZ; z++)
                 {
                     GridNode gridPos = new(x, z);
-                    Vector3 worldPos = new(x * tileSpacing, 0f, z * tileSpacing);
-                    walkableGrid[x, z] = true;
-                    CreateTile(gridPos, worldPos);
+                    Vector3 worldPos = GetWorldPosition(gridPos);
+
+                    TileView view = Instantiate(tilePrefab, worldPos, Quaternion.identity, tileParent);
+                    gridController.CreateTile(gridPos, view);
                 }
             }
         }
 
-        // Creates a tile at the specified grid and world positions
-        private void CreateTile(GridNode gridPos, Vector3 worldPos)
-        {
-            TileModel tileModel = new TileModel(gridPos, isWalkable: true, isOccupied: false);
-            gridModel.AddTile(tileModel);
+        public bool IsTileWalkable(GridNode gridPos) => gridController.IsTileWalkable(gridPos);
 
-            TileView tileView = Instantiate(tilePrefab);
-            tileView.transform.SetParent(tileParent);
-            tileView.transform.position = worldPos;
+        public void SetTileBlocked(GridNode gridPos, bool value) => gridController.SetTileBlocked(gridPos, value);
 
-            gridController.AddTileView(tileView, gridPos);
-        }
+        public void SetOccupied(GridNode gridPos, bool value) => gridController.SetTileOccupied(gridPos, value);
 
-        // Checks if the tile at the specified grid position is walkable
-        public bool IsWalkable(GridNode gridPos)
-        {
-            TileModel tile = gridModel.GetTile(gridPos);
-            if (tile == null) return false;
-            return tile.IsWalkable && !tile.IsOccupied;
-        }
+        public Vector3 GetWorldPosition(GridNode gridPos) => new Vector3(gridPos.x * tileSpacing, 0f, gridPos.y * tileSpacing);
 
-        // Sets the blocked state of the tile at the specified grid position
-        public void SetBlocked(GridNode gridPos, bool value)
-        {
-            TileModel tile = gridModel.GetTile(gridPos);
-            if (tile == null) return;
+        public bool[,] GetWalkableGrid() => gridController.GetWalkableGrid(gridX, gridZ);
 
-            tile.SetWalkable(!value);
-            walkableGrid[gridPos.x, gridPos.y] = IsWalkable(gridPos);
-            gridController.SetTileBlocked(gridPos, value);
-        }
-
-        // Sets the occupied state of the tile at the specified grid position
-        public void SetOccupied(GridNode gridPos, bool value)
-        {
-            TileModel tile = gridModel.GetTile(gridPos);
-            if (tile == null) return;
-
-            tile.SetOccupied(value);
-            walkableGrid[gridPos.x, gridPos.y] = IsWalkable(gridPos);
-            gridController.SetTileOccupied(gridPos, value);
-        }
-
-        // Getter method to fetch particular grid position in world position
-        public Vector3 GetWorldPosition(GridNode gridPos) => 
-            new Vector3(gridPos.x * tileSpacing, 0f, gridPos.y * tileSpacing);
-
-        public bool[,] GetWalkableGrid => walkableGrid;
+        public TileState GetTileState(GridNode gridPos) => gridController.GetTileState(gridPos);
     }
 }

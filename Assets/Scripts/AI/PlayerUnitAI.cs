@@ -1,7 +1,9 @@
+using CartClash.Core;
 using CartClash.Grid;
 using CartClash.PathFinding;
 using CartClash.Units.Player;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace CartClash.AI
 {
@@ -9,14 +11,12 @@ namespace CartClash.AI
     {
         private PlayerUnitService player;
         private PathFindingService pathfinder;
-        private GridService gridService;
 
         // Constructor for setting player instance
-        public PlayerUnitAI(PlayerUnitService player, PathFindingService pathfinder, GridService gridService)
+        public PlayerUnitAI(PlayerUnitService player, PathFindingService pathfinder)
         {
             this.player = player;
             this.pathfinder = pathfinder;
-            this.gridService = gridService;
         }
 
         // Generates a new path using BFS pathfinding algorithm
@@ -26,11 +26,15 @@ namespace CartClash.AI
 
             GridNode startNode = player.GetCurrentPlayerNode();
 
-            bool[,] walkableGrid = gridService.GetWalkableGrid;
+            bool[,] walkableGrid = GameService.Instance.GridService.GetWalkableGrid();
 
             var path = pathfinder.FindPathWithBFS(startNode, targetNode, walkableGrid);
 
-            if (path == null || path.Count == 0) return null;
+            if (path == null || path.Count == 0)
+            {
+                Debug.LogWarning("No path found for player unit.");
+                return null;
+            }
 
             return path;
         }

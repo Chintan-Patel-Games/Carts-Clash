@@ -1,9 +1,15 @@
+using CartClash.Core;
 using CartClash.Grid;
 using CartClash.Utilities;
 using UnityEngine;
+using CartClash.Obstacles.SO;
 
-namespace CartClash.Obstacles
+namespace CartClash.Obstacles.Service
 {
+    /// <summary>
+    /// Provides functionality for applying and spawning obstacles within the grid, using configuration data and prefab
+    /// references.
+    /// </summary>
     public class ObstacleService : GenericMonoSingleton<ObstacleService>
     {
         [Header("Obstacle SO")]
@@ -14,7 +20,9 @@ namespace CartClash.Obstacles
 
         [SerializeField] private Transform obstacleParent;
 
-        // Applies obstacles to the grid based on the ObstacleSO configuration
+        /// <summary>
+        /// Applies obstacles to the grid based on the ObstacleSO configuration
+        /// </summary>
         public void ApplyObstacles()
         {
             if (obstacleSO == null) return;
@@ -27,18 +35,17 @@ namespace CartClash.Obstacles
 
                     GridNode gridPos = new(x, y);
 
-                    if (!GridService.Instance.IsWalkable(gridPos)) continue;
+                    if (!GameService.Instance.GridService.IsTileWalkable(gridPos)) continue;
 
                     SpawnObstacle(gridPos);
-                    GridService.Instance.SetBlocked(gridPos, true);
+                    GameService.Instance.GridService.SetTileBlocked(gridPos, true);
                 }
             }
         }
 
-        // Spawns an obstacle at the specified grid position
         public void SpawnObstacle(GridNode gridPos)
         {
-            Vector3 worldPos = GridService.Instance.GetWorldPosition(gridPos);
+            Vector3 worldPos = GameService.Instance.GridService.GetWorldPosition(gridPos);
             GameObject prefab = obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)];
             Instantiate(prefab, worldPos, Quaternion.identity, obstacleParent);
         }

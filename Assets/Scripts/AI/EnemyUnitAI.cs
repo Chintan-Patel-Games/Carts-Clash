@@ -21,7 +21,7 @@ namespace CartClash.AI
 
         public List<GridNode> GeneratePathFrom(GridNode startNode, GridNode endNode)
         {
-            bool[,] walkableGrid = GameService.Instance.GridService.GetWalkableGrid;
+            bool[,] walkableGrid = GameService.Instance.GridService.GetWalkableGrid();
 
             walkableGrid[endNode.x, endNode.y] = true;
 
@@ -39,11 +39,15 @@ namespace CartClash.AI
 
             if (chaseNode == null) return null;
 
-            bool[,] walkableGrid = GameService.Instance.GridService.GetWalkableGrid;
+            bool[,] walkableGrid = GameService.Instance.GridService.GetWalkableGrid();
 
             var path = pathfinder.FindPathWithBFS(startNode, chaseNode.Value, walkableGrid);
 
-            if (path == null || path.Count == 0) return null;
+            if (path == null || path.Count == 0)
+            {
+                Debug.LogWarning("No path found for enemy unit.");
+                return null;
+            }
 
             return path;
         }
@@ -63,7 +67,7 @@ namespace CartClash.AI
 
             foreach (var n in neighbours)
             {
-                if (!GameService.Instance.GridService.IsWalkable(n))
+                if (!GameService.Instance.GridService.IsTileWalkable(n))
                     continue;
 
                 int dist =

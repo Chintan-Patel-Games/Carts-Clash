@@ -6,7 +6,7 @@ namespace CartClash.Core.GameLoop.States
     {
         public T Owner { get; set; }
 
-        public void OnEnterState() => Owner.OnUndo();
+        public void OnEnterState() => Owner.ProcessUndo();
         public void UpdateState() { }
         public void OnExitState() { }
     }

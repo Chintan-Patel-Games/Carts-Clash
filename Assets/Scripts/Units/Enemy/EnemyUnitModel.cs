@@ -1,17 +1,11 @@
 using CartClash.Grid;
-using CartClash.Units.Interface;
+using CartClash.Units.Base.Model;
 
 namespace CartClash.Units.Enemy
 {
-    public class EnemyUnitModel : IUnitModel
+    public class EnemyUnitModel : UnitModel
     {
-        public GridNode CurrentNode { get; set; }
-        public float MoveSpeed { get; set; }
 
-        public EnemyUnitModel(GridNode startNode, float speed)
-        {
-            CurrentNode = startNode;
-            MoveSpeed = speed;
-        }
+        public EnemyUnitModel(GridNode startNode, float speed) : base(startNode, speed) { } 
     }
 }

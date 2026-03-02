@@ -1,29 +1,22 @@
 using System.Collections.Generic;
-using CartClash.Grid.Tile;
+using CartClash.Grid.Tile.Model;
 
-namespace CartClash.Grid
+namespace CartClash.Grid.Model
 {
+    /// <summary>
+    /// Represents a grid structure that manages a collection of tiles, each identified by a grid position.
+    /// </summary>
     public class GridModel
     {
-        // Stores the tiles in the grid
-        private readonly Dictionary<GridNode, TileModel> tiles;
+        /// <summary>
+        /// Represents the mapping of grid nodes to their associated tile models.
+        /// </summary>
+        private readonly Dictionary<GridNode, TileModel> tiles = new();
 
-        public GridModel() => tiles = new Dictionary<GridNode, TileModel>();
+        public void AddTile(GridNode node, TileModel tile) => tiles[node] = tile;
 
-        // Checks if the tile exists at given position
-        public bool HasTile(GridNode position) => tiles.ContainsKey(position);
+        public TileModel GetTile(GridNode node) => tiles.TryGetValue(node, out var tile) ? tile : null;
 
-        // Adds a new tile to the grid
-        public void AddTile(TileModel tile) => tiles[tile.TilePosition] = tile;
-
-        // Getter nethod for a tile at the given position
-        public TileModel GetTile(GridNode position)
-        {
-            tiles.TryGetValue(position, out var tile);
-            return tile;
-        }
-
-        // Getter method for all tiles in the grid
-        public IEnumerable<TileModel> GetAllTiles() => tiles.Values;
+        public bool HasTile(GridNode node) => tiles.ContainsKey(node);
     }
 }

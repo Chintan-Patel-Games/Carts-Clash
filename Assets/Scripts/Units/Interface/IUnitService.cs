@@ -1,11 +1,13 @@
 using CartClash.Grid;
 
-namespace CartClash.Units.Interface
+namespace CartClash.Units.Interface.Service
 {
-    // Interface for unit services
+    /// <summary>
+    /// Defines a service for spawning units at specified locations within a grid.
+    /// </summary>
     public interface IUnitService
     {
-        // Spawns a unit at the specified grid node
         public void SpawnUnit(GridNode spawnNode);
+        public void DeleteUnit();
     }
 }
