@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace CartClash.Obstacles
 {
+    /// <summary>
+    /// Provides functionality for applying and spawning obstacles within the grid, using configuration data and prefab
+    /// references.
+    /// </summary>
     public class ObstacleService : GenericMonoSingleton<ObstacleService>
     {
         [Header("Obstacle SO")]
@@ -14,7 +18,9 @@ namespace CartClash.Obstacles
 
         [SerializeField] private Transform obstacleParent;
 
-        // Applies obstacles to the grid based on the ObstacleSO configuration
+        /// <summary>
+        /// Applies obstacles to the grid based on the ObstacleSO configuration
+        /// </summary>
         public void ApplyObstacles()
         {
             if (obstacleSO == null) return;
@@ -35,7 +41,6 @@ namespace CartClash.Obstacles
             }
         }
 
-        // Spawns an obstacle at the specified grid position
         public void SpawnObstacle(GridNode gridPos)
         {
             Vector3 worldPos = GridService.Instance.GetWorldPosition(gridPos);

@@ -6,6 +6,10 @@ using System.Collections.Generic;
 
 namespace CartClash.Grid
 {
+    /// <summary>
+    /// Provides functionality for managing tiles within a grid, including creation, state updates, and querying tile
+    /// properties.
+    /// </summary>
     public class GridController
     {
         private readonly Dictionary<GridNode, TileController> tileControllers = new();
@@ -44,7 +48,6 @@ namespace CartClash.Grid
             tile.SetOccupied(value);
         }
 
-        //  Checks if a TileView exists at the given position
         public bool HasTile(GridNode position) => tileViews.ContainsKey(position);
 
         public TileView GetTileView(GridNode position) => tileViews.TryGetValue(position, out TileView view) ? view : null;

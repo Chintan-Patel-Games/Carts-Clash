@@ -3,16 +3,20 @@ using UnityEngine;
 
 namespace CartClash.Obstacles
 {
+    /// <summary>
+    /// Provides a custom Unity Editor window for viewing and editing the blocked tiles of an ObstacleSO asset.
+    /// </summary>
     public class ObstacleEditorWindow : EditorWindow
     {
         private ObstacleSO obstacleSO;
 
         [MenuItem("CartClash/Obstacle Editor")]
-        public static void ShowWindow()
-        {
-            GetWindow<ObstacleEditorWindow>("Obstacle Editor");
-        }
+        public static void ShowWindow() => GetWindow<ObstacleEditorWindow>("Obstacle Editor");
 
+        /// <summary>
+        /// Draws and manages the custom inspector GUI for editing the properties of the associated ObstacleSO asset in
+        /// the Unity Editor.
+        /// </summary>
         private void OnGUI()
         {
             obstacleSO = (ObstacleSO)EditorGUILayout.ObjectField("Obstacle SO", obstacleSO, typeof(ObstacleSO), false);
